@@ -1,0 +1,129 @@
+<include file="Public:header" />
+<div class="autobox" id="reg-step3">
+	<div class="login_step">
+		<ul class="order clear">
+			<li><i class="order_1"></i>{:L('login.yonghuzhuce')}<div class="order_line"></div></li>
+			<li><i class="order_2"></i>{:L('login.shezhijiaoyimima')}<div class="order_line"></div></li>
+			<li class="orange"><i class="order_3_1"></i>{:L('login.shimingrenzheng')}<div class="order_line"></div></li>
+			<li><i class="order_4"></i>{:L('login.chenggong')}</li>
+		</ul>
+	</div>
+	<div class="reg_box">
+		<div class="reg_wrap pt47">
+			<div class="reg_warning"><span>{:L('login.qingtianxiezhenshixinxi')}</span></div>
+			<div class="reg_input_box reg-fb">
+				<div class="reg_title">{:L('login.zhenshixingmin')}：</div>
+				<input type="text" id="regtruename" value="" />
+				<div id="regtruename-msg" class="form_explain" style="display: none" data-explain="{:L('login.zhenshixingmingbunengxiugai')}<em></em>" >{:L('login.zhenshixingmingbunengxiugai')}<em></em></div>
+			</div>
+			<div class="reg_input_box reg-fb">
+				<div class="reg_title">{:L('login.zhengjianleixing')}：</div>
+				<select id="regidcardtype">
+					<option value="1" selected>{:L('login.shenfenzheng')}</option>
+					<option value="2">{:L('login.huzhao')}</option>
+				</select>
+			</div>
+			<div class="reg_input_box reg-fb">
+				<div class="reg_title">{:L('login.zhengjianhao')}：</div>
+				<input type="text" id="regidcard" value="" />
+				<div id="regidcard-msg" class="form_explain" style="display: none" data-explain="{:L('login.zhengjianhaomazhucehoubunengxiugai')}<em></em>" >{:L('login.zhengjianhaomazhucehoubunengxiugai')}<em></em></div>
+			</div>
+
+			<div class="reg_button_box">
+				<input type="button" value="{:L('login.xiayibu')}" onclick="Update();"/>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="autobox" style="margin-bottom: 30px">
+	<ul class="safety_tips_ul clear">
+		<li>
+			<div class="safety_img safety_img_1"></div>
+			<h4>{:L('login.xitongkekao')}</h4>
+			<p>{:L('login.jiaoyianquan')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_2"></div>
+			<h4>{:L('login.zijinanquan')}</h4>
+			<p>{:L('login.zijinanquanmiaoshu')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_3"></div>
+			<h4>{:L('login.kuaijiefangbian')}</h4>
+			<p>{:L('login.gaoxingnengjiaoyi')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_4"></div>
+			<h4>{:L('login.fuwuzhuanye')}</h4>
+			<p>{:L('login.zhuanyekefufuwu')}</p>
+		</li>
+	</ul>
+</div>
+<script>
+	$('input').focus(function(){
+		var t=$(this);
+		if(t.attr('type')=='text'||t.attr('type')=='password')
+			t.css({'box-shadow':'0px 0px 3px #1583fb','border':'1px solid #1583fb','color':'#333' });
+		if(t.val()==t.attr('placeholder'))
+			t.val('');
+	});
+	$('input').blur(function(){
+		var t=$(this);
+		if(t.attr('type')=='text'||t.attr('type')=='password')
+			t.css({'box-shadow':'none','border':'1px solid #e1e1e1','color':'#333' });
+		if(t.attr('type')!='password'&&!t.val())
+			t.val(t.attr('placeholder'));
+	});
+	$('.reg_input_box input').each(function(i,d){
+		$(d).focus(function(){
+			var oRegMsg=$('#'+$(this).attr('id')+'-msg');
+			oRegMsg.attr('class')=='form_explain_error'?oRegMsg.attr('class','form_explain').html(oRegMsg.attr('data-explain')).show():oRegMsg.show();
+		})
+		$(d).blur(function(){
+			var oRegMsg=$('#'+$(this).attr('id')+'-msg');
+			$(this).parent().find('.form_explain').hide();
+		})
+	})
+	var mbTest_username=/^(?![^a-zA-Z]+$)(?!\D+$).{5,15}$/;
+	var mbTest_password=/^[a-zA-Z0-9_]{5,15}$/;
+	//输入框消息
+	function formMsg(o, status, msg){
+		$('#'+o+'-msg').attr('class', 'form_explain_'+(status?'pass':'error')).html((typeof msg == 'undefined'? '': msg)+'<em></em>').show();
+		return true;
+	}
+
+
+	function Update(){
+		var truename=$("#regtruename").val();
+		var idcardtype=$("#regidcardtype").val();
+		var idcard=$("#regidcard").val();
+
+		if(truename==null||truename==""){
+			formMsg('truename', 0, '请输入真实姓名');
+			return false;
+		}
+		if(idcard==null||idcard==""){
+			formMsg('idcard', 0, '请输入{:L('login.zhengjianhao')}');
+			return false;
+		}
+
+
+		$.post("{:U('Login/upregister3')}",{truename:truename,idcardtype:idcardtype,idcard:idcard},function(data){
+			if(data.status==1){
+				layer.msg(data.info,{icon:1});
+				window.location='/Login/register4';
+			}else{
+				layer.msg(data.info,{icon:2});
+				if(data.url){
+					window.location=data.url;
+				}
+			}
+		},"json");
+	}
+	
+	
+	
+	
+	
+</script>
+<include file="Public:footer" />

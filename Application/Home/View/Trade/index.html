@@ -1,0 +1,814 @@
+<include file="Trade:header" />
+
+<div class="autobox mt20 clear" id="Kline-change" style="padding-top: 20px;">
+ <div class="left w790" style="position: relative;">
+  <!--{:L('trade.xingqing')}图-->
+  <div id="kline">
+   <div id="paint_chart" style="height: 400px">
+    <iframe style="border-style: none;" border="0" width="100%" height="400" id="market_chart" src="/Trade/ordinary?market={$market}"></iframe>
+   </div>
+  </div>
+  <!--{:L('trade.xingqing')}图结束-->
+  <div class="fast_tr clear">
+   <a name="mark-trade"></a>
+   <form class="ft_box" id="form-buy">
+    <dl>
+     <dt class="orange">{:L('trade.mairu')}</dt>
+     <dd>
+      <p>{:L('trade.zuijiamaijia')}：</p>
+      <span class="orange" id="buy_best_price">-</span> {$rmb|strtoupper}/{$xnb|strtoupper}
+
+      <eq name="C['trade_hangqing']" value="1">
+      <a style="float: right;margin-right: 60px;color:#e55600;" id="market_hangqing" onclick="hangqing()">{:L('trade.jinrixingqing')}</a>
+       </eq>
+     </dd>
+     <dd>
+      <p>{:L('trade.mairujiage')}：</p>
+      <input type="text" id="buy_price" name="price" placeholder="{:L('trade.1gebijiage')}">
+     </dd>
+     <dd>
+      <p>{:L('trade.zuidakemai')}：</p>
+      <span class="col_333" id="buy_max" title="满仓(全买)，设置{:L('trade.mairushuliang')}为最大值">-</span> {$xnb|strtoupper}
+     </dd>
+     <dd>
+      <p>{:L('trade.mairubili')}：</p>
+      <div class="slider_wrap">
+       <div id="ratio_num_buy" class="ratio">0%</div>
+       <div class="sliderbox">
+        <div id="slider_buy" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+         <div class="ui-slider-range ui-widget-header ui-slider-range-min"></div>
+         <a data_slide="buy" class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+         <div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style="width: 0%;"></div>
+        </div>
+       </div>
+      </div>
+     </dd>
+     <dd>
+      <p>{:L('trade.mairushuliang')}：</p>
+      <input type="text" id="buy_num" name="num">
+     </dd>
+     <dd>
+      <p>{:L('trade.zongjia')}：</p>
+      <span class="col_333" id="buy_mum">-</span> {$rmb|strtoupper}
+     </dd>
+     <dd>
+      <p>{:L('trade.shouxufei')}：</p>
+      {:C('market')[$market]['fee_buy']}%
+     </dd>
+     <dd class="pwdtrade">
+      <p>{:L('trade.jiaoyimima')}：</p>
+      <input id="buy_paypassword" name="pwtrade" type="password"> <span onclick="layertpwd()" class="settings"></span>
+     </dd>
+    </dl>
+    <div>
+     <div class="trader_btn">
+      <div class="tan_btn" id="tm-buy"></div>
+      <input type="button" value="{:L('trade.mairu')}" onclick="tradeadd_buy();">
+     </div>
+    </div>
+   </form>
+   <form class="ft_box nobr" id="form-sell">
+    <dl>
+     <dt class="green">{:L('trade.maichu')}</dt>
+     <dd>
+      <p>{:L('trade.zuijiamaijia4')}：</p>
+      <span class="orange" id="sell_best_price" style="    color: #690!important;">-</span> {$rmb|strtoupper}/{$xnb|strtoupper}
+
+      <eq name="C['trade_hangqing']" value="1">
+      <a style="float: right;margin-right: 60px;color:#e55600;" id="market_hangqing" onclick="hangqing()">{:L('trade.jinrixingqing')}</a>
+</eq>
+     </dd>
+     <dd>
+      <p>{:L('trade.maichujiage')}：</p>
+      <input type="text" id="sell_price" name="price" placeholder="{:L('trade.1gebijiage')}"/>
+     </dd>
+     <dd>
+      <p>{:L('trade.zuidakemai')}：</p>
+      <span id="sell_max" class="col_333">-</span> {$xnb|strtoupper}
+     </dd>
+     <dd>
+      <p>{:L('trade.maichubili')}：</p>
+      <div class="slider_wrap">
+       <div id="ratio_num_sell" class="ratio">0%</div>
+       <div class="sliderbox">
+        <div id="slider_sell" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+         <div class="ui-slider-range ui-widget-header ui-slider-range-min"></div>
+         <a data_slide="sell" class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+         <div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style="width: 0%;"></div>
+        </div>
+       </div>
+      </div>
+     </dd>
+     <dd>
+      <p>{:L('trade.maichushuliang')}：</p>
+      <input type="text" id="sell_num" name="num">
+     </dd>
+     <dd>
+      <p>{:L('trade.zongjia')}：</p>
+      <span class="col_333" id="sell_mum">-</span> {$rmb|strtoupper}
+     </dd>
+     <dd>
+      <p>{:L('trade.shouxufei')}：</p>
+      {:C('market')[$market]['fee_sell']}%
+     </dd>
+     <dd class="pwdtrade">
+      <p>{:L('trade.jiaoyimima')}：</p>
+      <input id="sell_paypassword" name="pwtrade" type="password"> <span onclick="layertpwd()" class="settings"></span>
+     </dd>
+    </dl>
+    <div>
+     <div class="trader_btn">
+      <div class="tan_btn" id="tm-sell"></div>
+      <input class="bg_green" type="button" value="{:L('trade.maichu')}" onclick="tradeadd_sell();">
+     </div>
+    </div>
+   </form>
+  </div>
+ </div>
+ <div class="right w390">
+  <div class="zcxx hide" style="display: block; margin-bottom: 20px;">
+   <div class="right_table">
+    <table style="width: 100%">
+     <tbody>
+      <tr>
+       <th>{:L('trade.keyong')}{$C['coin'][$xnb]['title']}</th>
+       <td><span id="my_xnb">0</span></td>
+      </tr>
+      <tr>
+       <th>{:L('trade.dongjie')}{$C['coin'][$xnb]['title']}</th>
+       <td><font id="my_xnbd">0</font></td>
+      </tr>
+      <tr>
+       <th>{:L('trade.keyong')}{$C['coin'][$rmb]['title']}</th>
+       <td><span id="my_rmb">0</span></td>
+      </tr>
+      <tr>
+       <th>{:L('trade.dongjie')}{$C['coin'][$rmb]['title']}</th>
+       <td><font id="my_rmbd">0</font></td>
+      </tr>
+      <tr>
+       <th>{:L('trade.zhanghuzongzichan')}</th>
+       <td><font id="user_finance">0</font></td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+  </div>
+  <div class="tradeBox">
+   <div class="slideHd">
+    <!-- 下面是前/后按钮代码，如果不需要删除即可 -->
+    <ul class="active">
+     <li id="trade_moshi_1" class="trade_moshi on"><a href="javascript:void(0);" onclick="moshi(1)"> {:L('trade.morenmoshi')} </a></li>
+     <eq name="C['trade_moshi']" value="1">
+     <li id="trade_moshi_2" class="trade_moshi"><a href="javascript:void(0);" onclick="moshi(2)"> {:L('trade.liaotianmoshi')} </a></li>
+     </eq>
+     <li id="trade_moshi_3" class="trade_moshi"><a href="javascript:void(0);" onclick="moshi(3)"> {:L('trade.zhikanmairu')} </a></li>
+     <li id="trade_moshi_4" class="trade_moshi"><a href="javascript:void(0);" onclick="moshi(4)"> {:L('trade.zhikanmaichu')} </a></li>
+    </ul>
+   </div>
+  </div>
+  <div class="right" style="display: none;" id="trade_moshi_liaotian_1">
+   <div class="coinBox buyonesellone">
+    <div class="coinBoxBody buybtcbody2">
+     <div id="marqueebox1" class="">
+      <ul id="chat_content">
+      </ul>
+     </div>
+     <div id="marqueebox2">
+      <ul class="clearfix">
+       <li id="face" class="left"><a href="javascript:void(0);" class="face faceBtn" id="face1"> <img src="__PUBLIC__/Home/images/face.gif" width="20">
+       </a></li>
+       <li id="msg" class="left"><input type="text" name="msg" class="text" id="chat_text" style="width: 288px;"></li>
+       <li id="send" class="right"><input class="tijiao" type="button" value="发送" onclick="upChat()"></li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="entrust" style="max-height: 685px;" id="trade_moshi_liaotian_2">
+   <div class="entrust_list">
+    <ul>
+     <li class="first" style="width: 45px">{:L('trade.maimai')}</li>
+     <li class="w85" style="width: 90px">{:L('trade.jiage')}</li>
+     <li class="w64" style="width: 110px">{:L('trade.shuliang')}</li>
+     <li class="w62" style="width: 100px">{:L('trade.zonge')}</li>
+    </ul>
+    <div class="el_dl" id="selllist"></div>
+    <div class="el_dl" id="buylist" style="border-bottom: 1px dotted #fff;"></div>
+   </div>
+  </div>
+ </div>
+</div>
+<div class="clear over_auto  account_table autobox mt20" style="margin-top: 20px;">
+ <div id="entrust_over" class=" over_auto" style="margin-bottom: 10px;">
+  <div class="TitleBox" style="border_top: 1px solid #D5D5D5;">
+   <h3 class="PlateTitle">{:L('trade.wodeweituo')}</h3>
+  </div>
+  <div class="over_auto">
+   <table class="Transaction no_border_right no_border_left_right">
+    <thead>
+     <tr>
+      <th width="180">{:L('trade.shijian')}</th>
+      <th width="80">{:L('trade.maimai')}</th>
+      <th>{:L('trade.jiage')}</th>
+      <th>{:L('trade.shuliang')}</th>
+      <th>{:L('trade.yichengjiao')}</th>
+      <th>{:L('trade.zonge')}</th>
+      <th width="80">{:L('trade.caozuo')}</th>
+     </tr>
+    </thead>
+    <tbody id="entrustlist" class="no-border-left-right">
+    </tbody>
+   </table>
+  </div>
+ </div>
+</div>
+<div class=" autobox " style="border_bottom: 1px solid #D5D5D5; margin-top: 20px;">
+ <div class="clear">
+  <div class="TitleBox" style="border_top: 1px solid #D5D5D5;">
+   <h3 class="PlateTitle">{:L('trade.chengjiaojilu')}</h3>
+  </div>
+  <div class=" over_hidden">
+   <div class="over_auto">
+    <table class="Transaction  no_border_right no_border_left_right">
+     <thead>
+      <tr>
+       <th width="180">{:L('trade.shijian')}</th>
+       <th width="80">{:L('trade.maimai')}</th>
+       <th width="250">{:L('trade.chengjiaojia')}</th>
+       <th width="250">{:L('trade.chengjiaoliang')}</th>
+       <th><span style="padding_right: 18px;">{:L('trade.zonge')}</span></th>
+      </tr>
+     </thead>
+    </table>
+   </div>
+   <div class="over_auto" style="_height: 508px; max-height: 508px; overflow-x: hidden; overflow-y: auto;">
+    <table class="Transaction  no_border_right no_border_left_right">
+     <tbody id="orderlist" class="no-border-left-right">
+     </tbody>
+    </table>
+   </div>
+  </div>
+ </div>
+</div>
+<br>
+<br>
+
+
+
+
+
+
+<script type="text/javascript">
+	var market="{$market}";
+    var market_round="{$C['market'][$market]['round']}";
+    var market_round_num=8-"{$C['market'][$market]['round']}";
+	var userid="{$Think.session.userId}";
+	var trade_moshi=1;
+	var getDepth_tlme=null;
+	var trans_lock = 0;
+
+
+
+    function hangqing() {
+     layer.alert("{:L('trade.jiaoyishichang')}:{:C('market')[$market]['title']}<br><br>" +
+             "{:L('trade.zuorishoupanjia')}:{$C['market'][$market]['hou_price']|NumToStr}<br>" +
+             "{:L('trade.jinrizhangfuxianzhi')}：{:C('market')[$market]['zhang']}%<br>" +
+             "{:L('trade.jinridiefuxianzhi')}：{:C('market')[$market]['die']}%<br>" +
+             "{:L('trade.zuixiaojiaoyijia')}:{$C['market'][$market]['buy_min']|NumToStr}<br>" +
+             "{:L('trade.maichuzuida')}:{$C['market'][$market]['sell_max']|NumToStr}<br>",
+             {title: '{:L('trade.jinrixingqing')}',});
+    }
+
+
+	function moshi(id){
+		trade_moshi=id;
+		$('.trade_moshi').removeClass('on');
+		$('#trade_moshi_'+id).addClass('on');
+		if(id==3){
+			$('#selllist').hide();
+		}else{
+			$('#selllist').show();
+		}
+		
+		if(id==4){
+			$('#buylist').hide();
+		}else{
+			$('#buylist').show();
+		}
+		
+		if(id==2){
+			$('#trade_moshi_liaotian_2').hide();
+			$('#trade_moshi_liaotian_1').show();
+			getChat();
+		}else{
+			$('#trade_moshi_liaotian_2').show();
+			$('#trade_moshi_liaotian_1').hide();
+			getDepth();
+		}
+	}
+	
+    
+	
+	function layertpwd(){
+        var html = '<div id="all_mask" class="all_mask"></div><div id="tpwd" class="all_mask_loginbox">' +
+            '<div class="login_title pl20">{:L('trade.yimimashezhi')}</div><form id="tpwdsetting" class="set_verify">' +
+            '<ul class="tpwd"><li><label for="only"><input type="radio" id="only" value="1" name="aaatpwdsetting"> {:L('trade.denglushurumima')} </label></li><li>' +
+            '<label for="every"><input type="radio" checked id="every" value="2" name="aaatpwdsetting"> {:L('trade.jiaoyishurumima')}</label></li><li><label for="none">' +
+            '<input type="radio" id="none" name="aaatpwdsetting" value="3"> {:L('trade.jiaoyibuxumima')}</label></li><li><input type="password" id="aaapaypassword" name="paypassword" placeholder="{:L('trade.shurujiaoyimima')}" class="text"/>' +
+            '</li></ul><div class="save_verify"><input type="button" value="{:L('trade.baocun')}" onclick="tpwdsettingaa()" /></div><div class="mask_wrap_close" id="pwd_close"></div></form></div>';
+        $('body').append(html);
+        $('#tpwd').css('top',($(window).height()/2)-(265/2)+$(document).scrollTop());
+        $('.all_mask').css({'height': $(document).height()});
+        $('#pwd_close').click(function(){
+        	$('#tpwd').remove();
+        	$('#all_mask').remove();
+        	$('#all_mask').remove();
+        })
+        
+        
+        $.get('/user/tpwdsetting', function(d){
+        	if(d==1){
+        		$('#only').prop('checked', true);
+        	}
+       		 if(d==2){
+    				$('#every').prop('checked', true);
+    			}
+			if(d==3){
+				$('#none').prop('checked', true);
+			}
+            
+
+        })
+	}
+	
+	//保存交易密码设置
+	function tpwdsettingaa(){
+       var paypassword=$("#aaapaypassword").val();
+       var tpwdsetting=$("input[name='aaatpwdsetting']:checked").val();
+       if(paypassword==""||paypassword==null){
+        layer.tips('{:L('trade.shurujiaoyimima')}','#paypassword',{tips : 3 });
+        return false;
+       }
+       if(tpwdsetting==""||tpwdsetting==null){
+        layer.tips('{:L('trade.shuruxuanze')}','#tpwdsetting',{tips : 3 });
+        return false;
+       }
+
+
+
+	    	 $.post('/user/uptpwdsetting', {paypassword : paypassword,tpwdsetting : tpwdsetting}, function(d){
+	             if(d.status) {
+                  layer.msg('{:L('trade.shezhichenggong')}',{icon : 1 });
+                  window.location.reload();
+	             } else {
+                  layer.msg(d.info,{icon : 2 });
+                 }
+
+	         },'json');
+	    }
+	
+	
+
+	
+	
+	function tradeadd_buy(){
+		if(trans_lock){
+			layer.msg('{:L('trade.buyaozhongfutijiao')}',{icon : 2 });
+			return;
+		}
+		trans_lock = 1;
+		
+		var price=parseFloat($('#buy_price').val());
+		var num=parseFloat($('#buy-num').val());
+		var paypassword=$('#buy_paypassword').val();
+		if(price==""||price==null){
+			layer.tips('{:L('trade.qingshuruneirong')}','#buy_price',{tips : 3 });
+			return false;
+		}
+		if(num==""||num==null){
+			layer.tips('{:L('trade.qingshuruneirong')}','#buy_num',{tips : 3 });
+			return false;
+		}
+
+		//加载层-风格3
+		layer.load(2);
+		
+		
+		//此处演示关闭
+		setTimeout(function(){
+		  layer.closeAll('loading');
+		  trans_lock = 0;
+		}, 10000);
+		$.post("{:U('Trade/upTrade')}",{price : $('#buy_price').val(),num : $('#buy_num').val(),paypassword : $('#buy_paypassword').val(),market : market,type : 1 },function(data){
+			layer.closeAll('loading');
+			trans_lock = 0;
+			if(data.status==1){
+				
+				$("#buy_price").val('');
+				$("#buy_num").val('');
+				$("#sell_price").val('');
+				$("#sell_num").val('');
+				layer.msg(data.info,{icon : 1 });
+			}else{
+				layer.msg(data.info,{icon : 2 });
+			}
+		},'json');
+	}
+	
+	function tradeadd_sell(){
+		if(trans_lock){
+			layer.msg('{:L('trade.buyaozhongfutijiao')}',{icon : 2 });
+			return;
+		}
+		trans_lock = 1;
+		var price=parseFloat($('#sell_price').val());
+		var num=parseFloat($('#sell_num').val());
+		var paypassword=$('#sell_paypassword').val();
+		if(price==""||price==null){
+			layer.tips('{:L('trade.qingshuruneirong')}','#sell_price',{tips : 3 });
+			return false;
+		}
+		if(num==""||num==null){
+			layer.tips('{:L('trade.qingshuruneirong')}','#sell_num',{tips : 3 });
+			return false;
+		}
+		layer.load(2);
+		//此处演示关闭
+		setTimeout(function(){
+		  layer.closeAll('loading');
+		  trans_lock = 0;
+		}, 10000);
+		
+	
+		
+		
+		$.post("{:U('Trade/upTrade')}",{price : $('#sell_price').val(),num : $('#sell_num').val(),paypassword : $('#sell_paypassword').val(),market : market,type : 2 },function(data){
+			layer.closeAll('loading');
+			trans_lock = 0;
+			if(data.status==1){
+				$("#buy_price").val('');
+				$("#buy_num").val('');
+				$("#sell_price").val('');
+				$("#sell_num").val('');
+				layer.msg(data.info,{icon : 1 });
+			}else{
+				layer.msg(data.info,{icon : 2 });
+			}
+		},'json');
+	}
+	
+	
+	
+	
+
+	//撤销
+	function cancelaa(id){
+		$.post("{:U('Trade/chexiao')}",{id : id },function(data){
+			if(data.status==1){
+				getEntrustAndUsercoin();
+				layer.msg(data.info,{icon : 1 });
+			}else{
+				layer.msg(data.info,{icon : 2 });
+			}
+		});
+	}
+
+	function getTradelog(){
+		$.getJSON("/Ajax/getTradelog?market="+market+"&t="+Math.random(),function(data){
+			if(data){
+				if(data['tradelog']){
+					var list='';
+					var type='';
+					var typename='';
+					for( var i in data['tradelog']){
+						if(data['tradelog'][i]['type']==1){
+							list+='<tr title="{:L('trade.yizhegejiagemaichu')}" onclick="autotrust(this,\'buy\',2)"><td class="buy"   width="180">'+data['tradelog'][i]['addtime']+'</td><td class="buy"   width="80">买</td><td class="buy"   width="250">'+data['tradelog'][i]['price']+'</td><td class="buy"  width="250">'+data['tradelog'][i]['num']+'</td><td class="buy">'+data['tradelog'][i]['mum']+'</td></tr>';
+						}else{
+							list+='<tr title="{:L('trade.yizhegejiagemairu')}" onclick="autotrust(this,\'sell\',2)"><td class="sell"   width="180">'+data['tradelog'][i]['addtime']+'</td><td class="sell"   width="80">卖</td><td class="sell"   width="250">'+data['tradelog'][i]['price']+'</td><td class="sell"  width="250">'+data['tradelog'][i]['num']+'</td><td class="sell">'+data['tradelog'][i]['mum']+'</td></tr>';
+						}
+					}
+					$("#orderlist").html(list);
+				}
+			}
+		});
+		setTimeout('getTradelog()',5000);
+	}
+
+	function getDepth(){
+		if(trade_moshi!=2){
+
+			$.getJSON("/Ajax/getDepth?market="+market+"&trade_moshi="+trade_moshi+"&t="+Math.random(),function(data){
+				if(data){
+
+					if(data['depth']){
+						var list='';
+						var sellk=data['depth']['sell'].length;
+						if(data['depth']['sell']){
+							for(i=0; i<data['depth']['sell'].length; i++){
+								list+='<dl title="{:L('trade.yizhegejiagemairu')}" style="cursor: pointer;" onclick="autotrust(this,\'sell\',1)"><dt class="sell"  style="width: 40px;padding-left: 5px;">卖'+(sellk-i)+'</dt><dd class="sell"  style="width: 90px">'+data['depth']['sell'][i][0]+'</dd><dd class="sell"  style="width: 110px">'+data['depth']['sell'][i][1]+'</dd><dd class="sell"  style="width: 100px">'+(data['depth']['sell'][i][0]*data['depth']['sell'][i][1]).toFixed(6)+'</dd></dl>';
+							}
+
+						}
+						$("#selllist").html(list);
+						list='';
+						if(data['depth']['buy']){
+							for(i=0; i<data['depth']['buy'].length; i++){
+								list+='<dl title="{:L('trade.yizhegejiagemaichu')}" style="cursor: pointer;" onclick="autotrust(this,\'buy\',1)"><dt class="buy"  style="width: 40px;padding-left: 5px;">买'+(i+1)+'</dt><dd class="buy"  style="width: 90px">'+data['depth']['buy'][i][0]+'</dd><dd class="buy"  style="width: 110px">'+data['depth']['buy'][i][1]+'</dd><dd class="buy"  style="width: 100px">'+(data['depth']['buy'][i][0]*data['depth']['buy'][i][1]).toFixed(6)+'</dd></dl>';
+							}
+
+						}
+						$("#buylist").html(list);
+					}
+
+				}
+			});
+			clearInterval(getDepth_tlme);
+			
+			var wait=second=5;
+			getDepth_tlme=setInterval(function(){
+				wait--;
+				if(wait<0){
+					clearInterval(getDepth_tlme);
+					getDepth();
+					wait=second;
+				}
+			},1000);
+		}
+	}
+
+	function getEntrustAndUsercoin(){
+		$.getJSON("/Ajax/getEntrustAndUsercoin?market="+market+"&t="+Math.random(),function(data){
+			if(data){
+				if(data['entrust']){
+					$('#entrust_over').show();
+					var list='';
+					var cont=data['entrust'].length;
+					for(i=0; i<data['entrust'].length; i++){
+						if(data['entrust'][i]['type']==1){
+							list+='<tr title="{:L('trade.yizhegejiagemaichu')}" onclick="autotrust(this,\'buy\',2)"><td class="buy">'+data['entrust'][i]['addtime']+'</td><td class="buy">买</td><td class="buy">'+data['entrust'][i]['price']+'</td><td class="buy">'+data['entrust'][i]['num']+'</td><td class="buy">'+data['entrust'][i]['deal']+'</td><td class="buy">'+(data['entrust'][i]['price']*data['entrust'][i]['num']).toFixed(6)+'</td><td><a style="color: #2674FF;" class="cancelaa" id="'+data['entrust'][i]['id']+'" onclick="cancelaa(\''+data['entrust'][i]['id']+'\')" href="javascript:void(0);">{:L('trade.chexiao')}</a></td></tr>';
+						}else{
+							list+='<tr title="{:L('trade.yizhegejiagemairu')}" onclick="autotrust(this,\'sell\',2)"><td class="sell">'+data['entrust'][i]['addtime']+'</td><td class="sell">卖</td><td class="sell">'+data['entrust'][i]['price']+'</td><td class="sell">'+data['entrust'][i]['num']+'</td><td class="sell">'+data['entrust'][i]['deal']+'</td><td class="sell">'+(data['entrust'][i]['price']*data['entrust'][i]['num']).toFixed(6)+'</td><td><a style="color: #2674FF;" class="cancelaa" id="'+data['entrust'][i]['id']+'" onclick="cancelaa(\''+data['entrust'][i]['id']+'\')" href="javascript:void(0);">{:L('trade.chexiao')}</a></td></tr>';
+						}
+					}
+					if(cont==10){
+						list+='<tr><td style="text_align:center;" colspan="7"><a href="/Finance/mywt" style="color: #2674FF;">更多委托信息</a>&nbsp;&nbsp;</td></tr>';
+					}
+					$('#entrustlist').html(list);
+				}else{
+					$('#entrust_over').hide();
+				}
+
+				if(data['usercoin']){
+					if(data['usercoin']['cny']){
+						$("#my_rmb").html(data['usercoin']['cny']);
+					}else{
+						$("#my_rmb").html('0.00');
+					}
+
+					if(data['usercoin']['cnyd']){
+						$("#my_rmbd").html(data['usercoin']['cnyd']);
+					}else{
+						$("#my_rmbd").html('0.00');
+					}
+
+					if(data['usercoin']['xnb']){
+						$("#my_xnb").html(data['usercoin']['xnb']);
+					}else{
+						$("#my_xnb").html('0.00');
+					}
+
+					if(data['usercoin']['xnbd']){
+						$("#my_xnbd").html(data['usercoin']['xnbd']);
+					}else{
+						$("#my_xnbd").html('0.00');
+					}
+				}
+
+			}
+		});
+		$.getJSON("/Ajax/allfinance?t="+Math.random(),function(data){
+			
+			$('#user_finance').html(data);
+		});
+		
+		
+		setTimeout('getEntrustAndUsercoin()',5000);
+	}
+
+	
+
+	$(function(){
+		getTradelog();
+		getDepth();
+		if(userid>0){
+			getEntrustAndUsercoin();
+		}else{
+            $('#entrust_over').hide();
+        }
+		
+		
+
+	
+	});
+
+
+    function toNum(num,round){
+     return Math.round(num*Math.pow(10,round)-1)/Math.pow(10,round);
+    }
+
+
+	// 自动填价格
+	function autotrust(_this,type,cq){
+		
+		if(type=='sell'){
+			$('#buy_price').val($(_this).children().eq(cq).html()).css({'color' : '#333','font_size' : '14px' });
+			if($("#my_rmb").html()>0){
+				$("#buy_max").html(toNum(($("#my_rmb").html()/$('#buy_price').val()),market_round_num));
+			}
+			if($('#buy_num').val()){
+		    	 $("#buy_mum").html(($('#buy_num').val()*$('#buy_price').val()).toFixed(8)*1);
+		     }
+			
+		}
+		if(type=='buy'){
+			$('#sell_price').val($(_this).children().eq(cq).html()).css({'color' : '#333','fontSize' : '14px' });
+			if($("#my_xnb").html()>0){
+				$("#sell_max").html($("#my_xnb").html());
+			}
+			if($('#sell_num').val()){
+		    	 $("#sell_mum").html(($('#sell_num').val()*$('#sell_price').val()).toFixed(8)*1);
+            }
+		}
+		 
+	}
+
+	
+	
+	
+	
+
+
+	$('#buy_price,#buy_num,#sell_price,#sell_num').css("ime-mode","disabled").bind('keyup change',function(){
+		var buyprice=parseFloat($('#buy_price').val());
+		var buynum=parseFloat($('#buy_num').val());
+		var sellprice=parseFloat($('#sell_price').val());
+		var sellnum=parseFloat($('#sell_num').val());
+		var buymum=buyprice*buynum;
+		var sellmum=sellprice*sellnum;
+		var myrmb=$("#my_rmb").html();
+		var myxnb=$("#my_xnb").html();
+		var buykenum=0;
+		var sellkenum=0;
+		if(myrmb>0){
+			buykenum=myrmb/buyprice;
+		}
+		if(myxnb>0){
+			sellkenum=myxnb;
+		}
+		if(buyprice!=null&&buyprice.toString().split(".")!=null&&buyprice.toString().split(".")[1]!=null){
+			if(buyprice.toString().split('.')[1].length>market_round){
+				$('#buy_price').val(buyprice.toFixed(market_round));
+			}
+		}
+		if(buynum!=null&&buynum.toString().split(".")!=null&&buynum.toString().split(".")[1]!=null){
+			if(buynum.toString().split('.')[1].length>market_round_num){
+				$('#buy_num').val(toNum(buynum,market_round_num));
+			}
+		}
+		if(sellprice!=null&&sellprice.toString().split(".")!=null&&sellprice.toString().split(".")[1]!=null){
+			if(sellprice.toString().split('.')[1].length>market_round){
+				$('#sell_price').val(sellprice.toFixed(market_round));
+			}
+		}
+		if(sellnum!=null&&sellnum.toString().split(".")!=null&&sellnum.toString().split(".")[1]!=null){
+			if(sellnum.toString().split('.')[1].length>market_round_num){
+				$('#sell_num').val(toNum(sellnum,market_round_num));
+			}
+		}
+		if(buymum!=null&&buymum>0){
+			$('#buy_mum').html(buymum.toFixed(8)*1);
+		}
+		if(sellmum!=null&&sellmum>0){
+			$('#sell_mum').html(sellmum.toFixed(8)*1);
+		}
+		if(buykenum!=null&&buykenum>0&&buykenum!='Infinity'){
+			$('#buy_max').html(toNum(buykenum,market_round_num));
+		}
+		if(sellkenum!=null&&sellkenum>0&&sellkenum!='Infinity'){
+			$('#sell_max').html(sellkenum);
+		}
+	}).bind("paste",function(){
+		return false;
+	}).bind("blur",function(){
+		if(this.value.slice(-1)=="."){
+			this.value=this.value.slice(0,this.value.length-1);
+		}
+	}).bind("keypress",function(e){
+		var code=(e.keyCode ? e.keyCode : e.which); //兼容火狐 IE 
+		if(this.value.indexOf(".")==-1){
+			return (code>=48&&code<=57)||(code==46);
+		}else{
+			return code>=48&&code<=57
+		}
+	});
+	
+	
+</script>
+<script type="text/javascript" src="__PUBLIC__/Home/js/jquery.qqFace.js"></script>
+<script type="text/javascript">
+//@他
+function atChat(_this){
+	$("#chat_text").val('@'+$(_this).html()+' :');
+}
+// 回车提交聊天
+$("#chat_text").keyup(function(e){
+	if(e.keyCode===13){
+		upChat();
+		return false;
+	}
+});
+// 提交聊天
+function upChat(){
+	var content=$("#chat_text").val();
+	if(content==""||content==null){
+		layer.tips('{:L('trade.qingshuruneirong')}','#chat_text',{tips : 3 });
+		return false;
+	}
+	$.post("/Ajax/upChat",{content : content },function(data){
+		if(data.status==1){
+			$("#chat_text").val('');
+			getChat();
+		}else{
+			layer.tips(data.info,'#chat_text',{tips : 3 });
+			return false;
+		}
+	},'json');
+}
+//表情盒子的ID//给那个控件赋值//表情存放的路径
+$('#face1').qqFace({id : 'facebox1',assign : 'chat_text',path : '__UPLOAD__/face/' });
+
+
+
+
+function getChat(){
+	if(trade_moshi==2){
+
+		$.getJSON("/Ajax/getChat?t="+Math.random(),function(data){
+			if(data){
+
+
+				var list='';
+				for(i=0; i<data.length; i++){
+					list+='<li><a href="javascript:void(0);" onclick="atChat(this)">'+data[i][1]+'</a>：'+data[i][2]+'</li>';
+				}
+				list=list.replace(/\[\/#([0-9]*)\]/g,'<img src="__UPLOAD__/face/$1.gif"  width="18">');
+
+
+              if($("#chat_content").html()!=list){
+               $("#chat_content").html(list);
+               $("#marqueebox1").scrollTop(40000);
+              }
+
+
+
+			}
+		});
+		setTimeout('getChat()',5000);
+	}
+}
+
+</script>
+
+
+
+<script type="text/javascript" src="__PUBLIC__/Home/js/jquery-ui.js"></script>
+<script type="text/javascript">
+ $(function() {
+  slider();
+ });
+ // 买入/卖出 比例
+ function slider(){
+  var type = ['sell','buy'];
+  for(var i in type){
+   $("#slider_"+type[i]).slider({
+    value: 0,min: 0, max: 100,step: 10,range: "min",slide: function(a, t) {
+     var type = $(t.handle).attr('data_slide');
+     var e = parseFloat($("#"+type+'_max').text());
+     if(isNaN(e)) e=0;
+     $("#"+type+' .ui-slider-handle').addClass('ui-state-focus ui-state-active');
+     $("#"+type+"_num").val((e / 100 * t.value).toFixed(market_round_num));
+     $("#ratio_num_"+type).text(t.value + "%");
+     if($('#'+type+'_price').val()){
+    	 $("#"+type+"_mum").html(((e / 100 * t.value*$('#'+type+'_price').val())).toFixed(8)*1);
+     }
+    }
+   })
+  }
+ }
+</script>
+<script>
+	//菜单高亮
+	$('#list-tab_index').addClass('on');
+</script>
+<include file="Public:footer" />                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 

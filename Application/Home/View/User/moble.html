@@ -1,0 +1,203 @@
+<include file="Public:header"/>
+<div class="autobox">
+    <div class="now">
+        <a href="/" class="orange">{:L('user.shouye')}</a> &gt;
+        <a href="/user/index.html" class="orange">{:L('user.anquanzhongxin')} </a> &gt; {:L('user.shoujibangding')}
+    </div>
+    <div class="assets_center clear po_re zin70">
+        <!--左侧菜单-->
+        <include file="User:left"/>
+        <!--右侧内容-->
+        <div class="assets_content w900 right bg_w">
+            <div class="safe_center clear" style="padding-left: 0px; border-bottom: 2px solid #e55600;">
+                <h1 style="margin-top: 0px; margin-bottom: 15px; line-height: 15px;">{:L('user.shoujibangding')}</h1>
+            </div>
+            <div class="sj" style="top: 40px; left: 60px;"></div>
+            <notempty name="prompt_text">
+                <div class="mytips">
+                    <h6 style="color: #ff8000;">{:L('user.wenxintishi')}</h6>
+                    {$prompt_text}
+                </div>
+            </notempty>
+            <br>
+            <empty name="user['moble']">
+                <div id="msg-box"></div>
+                <form id="form-mobilebinda" class="pwtrade mart30">
+                    <dl>
+                        <dt>{:L('user.shoujihaoma')}：</dt>
+                        <dd id="dd-mobilebinda">
+                            <input type="text" id="areaCode" value="86" style="width:40px;" />-<input type="text" id="moble">
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>{:L('user.yanzhengma')}：</dt>
+                        <dd id="dd-mobilebindb">
+                            <input type="text" id="verify" value="" style="width: 80px; box-shadow: none;"/>
+                            <img class="codeImg reloadverify" src="{:U('Verify/code')}" title="换一张" onclick="this.src=this.src+'?t='+Math.random()" width="100" height="38">
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>{:L('user.huoquyanzhengma')}：</dt>
+                        <dd class="yuyin">
+                            <div class="clear">
+                                <input id="regBtn" type="button" class="getyzm" value="免费{:L('user.huoquyanzhengma')}" onclick="SendCode()" style="width: 160px;">
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>{:L('user.duanxinyanzhengma')}：</dt>
+                        <dd>
+                            <input type="text" id="moble_verify">
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt></dt>
+                        <dd>
+                            <input type="button" value="{:L('user.bangdingshouji')}" id="btn-mobilebind" onclick="Update()"/>
+                        </dd>
+                    </dl>
+                </form>
+                <else/>
+                <div class="sj" style="top: 40px; left: 60px;"></div>
+                <form id="form-mobilebind" class="pwtrade mart30">
+                    <div class="band_succ" style="margin-bottom: 20px;margin-left: 130px;">
+                        <em></em>{:L('user.shoujiyanzheng')}。
+                    </div>
+                    <dl>
+                        <dt>{:L('user.shoujihaoma')}：</dt>
+                        <dd id="dd-mobilebindc" title="{:L('user.lianxixiugai')}">
+                            <input type="text" id="moble" value="{$user.moble}" readonly>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>{:L('user.bangdingshijian')}：</dt>
+                        <dd id="dd-mobilebindd">{$user.mobletime|date="Y-m-d H:i:s",###}</dd>
+                    </dl>
+                </form>
+            </empty>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<script>
+    $('input').focus(function () {
+        var t = $(this);
+        if (t.attr('type') == 'text' || t.attr('type') == 'password')
+            t.css({
+                'box-shadow': '0px 0px 3px #1583fb',
+                'border': '1px solid #1583fb',
+                'color': '#333'
+            });
+        if (t.val() == t.attr('placeholder'))
+            t.val('');
+    });
+    $('input').blur(function () {
+        var t = $(this);
+        if (t.attr('type') == 'text' || t.attr('type') == 'password')
+            t.css({
+                'box-shadow': 'none',
+                'border': '1px solid #e1e1e1',
+                'color': '#333'
+            });
+        if (t.attr('type') != 'password' && !t.val())
+            t.val(t.attr('placeholder'));
+    });
+
+    function SendCode() {
+        var areaCode = $("#areaCode").val();
+        var moble = $("#moble").val();
+        var verify = $("#verify").val();
+        
+        if (areaCode == null || areaCode == "") {
+            layer.tips('请输入区号', '#areaCode', {tips: 3});
+            return false;
+        }
+        if (moble == null || moble == "") {
+            layer.tips('{:L('user.shoujihaoma')}', '#moble', {tips: 3});
+            return false;
+        }
+        if (verify == null || verify == "") {
+            layer.tips('{:L('user.tuxingyanzhengma')}', '#verify', {tips: 3});
+            return false;
+        }
+        $.post("{:U('Verify/real')}", {
+            moble: areaCode + moble,
+            verify: verify
+        }, function (data) {
+            if (data.status == 1) {
+                //刷新验证码
+                $(".reloadverify").click();
+                $("#verify").val('');
+                $('#regBtn').attr("disabled", "disabled");
+                layer.msg(data.info, {icon: 1});
+                var obj = $('#regBtn');
+                var wait = 60;
+                var interval = setInterval(function () {
+                    obj.css('backgroundColor', '#999B9C');
+                    obj.val(wait + '{:L('user.zaicifasong')}');
+                    wait--;
+                    if (wait < 0) {
+                        clearInterval(interval);
+                        obj.val('{:L('user.huoquyanzhengma')}');
+                        obj.css('backgroundColor', '#e55600');
+                    }
+                    ;
+                }, 1000);
+            } else {
+                //刷新验证码
+                $(".reloadverify").click();
+                $("#verify").val('');
+                layer.msg(data.info, {icon: 2});
+                if (data.url) {
+                    window.location = data.url;
+                }
+            }
+        }, "json");
+    }
+    function Update() {
+        var areaCode = $("#areaCode").val();
+        var moble = $("#moble").val();
+        var moble_verify = $("#moble_verify").val();
+        var verify = $("#verify").val();
+        
+        if (areaCode == null || areaCode == "") {
+            layer.tips('请输入区号', '#areaCode', {tips: 3});
+            return false;
+        }
+        if (moble == null || moble == "") {
+            layer.tips('{:L('user.shoujihaoma')}', '#moble', {tips: 3});
+            return false;
+        }
+        if (moble_verify == null || moble_verify == "") {
+            layer.tips('{:L('user.shuduanxinyanzhengma')}', '#moble_verify', {tips: 3});
+            return false;
+        }
+        
+        $.post("{:U('User/upmoble')}", {
+            moble: areaCode + moble,
+            moble_verify: moble_verify
+        }, function (data) {
+            if (data.status == 1) {
+                layer.msg(data.info, {icon: 1});
+                window.location = "{:U('User/moble')}";
+            } else {
+                //刷新验证码
+                $(".reloadverify").click();
+                $("#verify").val('');
+                layer.msg(data.info, {icon: 2});
+                if (data.url) {
+                    window.location = data.url;
+                }
+            }
+        }, "json");
+    }
+</script>
+<script>
+    $("title").html("{:C('web_title')} - {:L('user.anquanzhongxin')} - {:L('user.shoujibangding')}");
+    //顶部菜单高亮
+    $('#user_box').addClass('active');
+    $('#user_moble').addClass('active');
+    $('#user_moble i').attr('class', 'coin_menu_op_12');
+</script>
+<include file="Public:footer"/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               

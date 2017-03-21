@@ -1,0 +1,258 @@
+<include file="Public:header" />
+<div class="autobox" id="reg-step1">
+	<div class="login_step">
+		<ul class="order clear">
+			<li class="orange"><i class="order_1_1"></i>{:L('login.yonghuzhuce')}
+				<div class="order_line"></div></li>
+			<li><i class="order_2"></i>{:L('login.shezhijiaoyimima')}
+				<div class="order_line"></div></li>
+			<li><i class="order_3"></i>{:L('login.shimingrenzheng')}
+				<div class="order_line"></div></li>
+			<li><i class="order_4"></i>{:L('login.chenggong')}</li>
+		</ul>
+	</div>
+
+    <div class="reg_box">
+		<div>
+			<div id="reg-control" class="btn-group" style="text-align: center; margin: 30px 0 10px 370px;">
+				
+			</div>
+			<div id="reg_index" class="reg_wrap">
+				<div class="reg_input_box reg-fb" id="username_reg">
+					<div class="reg_title">{:L('login.yonghuming')}：</div>
+					<input type="text" id="username" value="" onblur="regusername()" />
+					<div id="username-msg" class="form_explain" data-explain="{:L('register.qingshuruyongfuming')}<em></em>" style="display: none;">
+                        {:L('register.qingshuruyongfuming')}
+						<em></em>
+					</div>
+					
+				</div>
+				<div class="reg_input_box reg-fb" id="reg_first_verify">
+					<div class="reg_title">{:L('login.yanzhengma')}：</div>
+					<input type="text" id="verify" value="" onblur="regverify()" style="width: 165px; box-shadow: none; " />
+					<div id="verify-msg" class="form_explain" data-explain="{:L('login.shuruyanzhengma')}<em></em>" style="display: none;">
+						{:L('login.shuruyanzhengma')}<em></em>
+					</div>
+					<img class="codeImg" src="{:U('Verify/code')}" title="换一张" onclick="this.src=this.src+'?t='+Math.random()">
+				</div>
+				<div class="reg_input_box reg-fb">
+					<div class="reg_title">{:L('login.denglumima')}：</div>
+					<input type="password" id="password" value="" onblur="regpassword()" />
+					<div id="password-msg" class="form_explain" data-explain="{:L('register.qingshurudenglumima')}<em></em>" style="display: none;">
+						{:L('register.qingshurudenglumima')}<em></em>
+					</div>
+					
+				</div>
+				<div class="reg_input_box reg-fb">
+					<div class="reg_title">{:L('login.zhongfumima')}：</div>
+					<input type="password" id="repassword" value="" onblur="regrepassword()" />
+					<div id="repassword-msg" class="form_explain" data-explain="{:L('register.qingchongfudenglumima')}<em></em>" style="display: none;">
+						{:L('register.qingchongfudenglumima')}<em></em>
+					</div>
+					
+				</div>
+				<div class="reg_input_box reg-fb">
+					<div class="reg_title">{:L('login.yaoqingma')}：</div>
+					<input id="invit" name="invite" type="text" placeholder="{:L('register.qingshuruyaoqingma')}" value="{$Think.session.invit}"
+					<notempty name="Think.session.invit">readonly</notempty> />
+				</div>
+				<div class="reg_radio_box">
+					<label>{:L('login.zhucejishiweitongyi')} <a href="javascript:void(0)" onclick="registerAgreement();">{:L('login.zhucexieyi')}</a></label>
+				</div>
+				<div class="formbody">
+						<input type="button" class="movesay_btn" name="index_submit" id="loginSubmin" onclick="Update();" value="{:L('login.lijizhuce')}" title="{:L('login.lijizhuce')}" style="width: 320px;">
+						</div>
+			</div>
+		</div>
+    </div>
+
+</div>
+
+<div class="autobox" style="margin-bottom: 30px">
+	<ul class="safety_tips_ul clear">
+		<li>
+			<div class="safety_img safety_img_1"></div>
+			<h4>{:L('login.xitongkekao')}</h4>
+			<p>{:L('login.jiaoyianquan')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_2"></div>
+			<h4>{:L('login.zijinanquan')}</h4>
+			<p>{:L('login.zijinanquanmiaoshu')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_3"></div>
+			<h4>{:L('login.kuaijiefangbian')}</h4>
+			<p>{:L('login.gaoxingnengjiaoyi')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_4"></div>
+			<h4>{:L('login.fuwuzhuanye')}</h4>
+			<p>{:L('login.zhuanyekefufuwu')}</p>
+		</li>
+	</ul>
+</div>
+
+<script>
+
+	function registerAgreement(){
+		layer.open({
+			type:2,
+			skin:'layui-layer-rim', //加上边框
+			area:['800px','600px'], //宽高
+			title:'{:L('login.zhucexieyi')}', //不显示标题
+			content:"{:U('Login/webreg')}"
+		});
+	}
+
+
+	$('input').focus(function(){
+		var t=$(this);
+		if(t.attr('type')=='text'||t.attr('type')=='password')
+			t.css({'box-shadow':'0px 0px 3px #1583fb','border':'1px solid #1583fb','color':'#333' });
+		if(t.val()==t.attr('placeholder'))
+			t.val('');
+	});
+	$('input').blur(function(){
+		var t=$(this);
+		if(t.attr('type')=='text'||t.attr('type')=='password')
+			t.css({'box-shadow':'none','border':'1px solid #e1e1e1','color':'#333' });
+		if(t.attr('type')!='password'&&!t.val())
+			t.val(t.attr('placeholder'));
+	});
+	$('.reg_input_box input').each(function(i,d){
+		$(d).focus(function(){
+			var oRegMsg=$('#'+$(this).attr('id')+'-msg');
+			oRegMsg.attr('class')=='form_explain_error'?oRegMsg.attr('class','form_explain').html(oRegMsg.attr('data-explain')).show():oRegMsg.show();
+		})
+		$(d).blur(function(){
+			var oRegMsg=$('#'+$(this).attr('id')+'-msg');
+			$(this).parent().find('.form_explain').hide();
+		})
+	})
+	var mbTest_username=/^(?![^a-zA-Z]+$)(?!\D+$).{5,15}$/;
+	var mbTest_password=/^[a-zA-Z0-9_]{5,15}$/;
+	//输入框消息
+	function formMsg(o, status, msg){
+		$('#'+o+'-msg').attr('class', 'form_explain_'+(status?'pass':'error')).html((typeof msg == 'undefined'? '': msg)+'<em></em>').show();
+		return true;
+	}
+	function regusername(){
+		var username = $('#username').val();
+		if(username==""||username==null){
+			formMsg('username', 0, '{:L('login.shuruyonghuming')}');
+			return false;
+		}
+		$.post("{:U('Login/chkUser')}",{username:username},function(ret){
+			if(ret.status){
+				formMsg('username', 1);
+				return true;
+			}else{
+				formMsg('username', 0, ret.info);
+				return false;
+			}
+		},'json');
+	}
+	function regverify(){
+		var verify = $('#verify').val();
+		if(verify==""||verify==null){
+			formMsg('verify', 0, '{:L('login.shuruyanzhengma')}');
+			return false;
+		}else{
+			formMsg('verify', 1);
+			return true;
+		}
+	}
+
+	function regpassword(){
+		var password = $('#password').val();
+		if(password==""||password==null){
+			formMsg('password', 0, '请输入{:L('login.denglumima')}');
+			//formMsg('password', 0, 'please enter{:L('login.denglumima')}');
+			return false;
+		}else{
+			if(!mbTest_password.test(password)){
+				formMsg('password', 0, '{:L('login.denglumima')}格式错误 (6~16个字符)');
+				//formMsg('password', 0, '{:L('login.denglumima')} farmat error (6~16 long characters long)');
+				return false;
+			}else{
+				formMsg('password', 1);
+				return true;
+			}
+		}
+	}
+	
+	function regrepassword(){
+		var password = $('#password').val();
+		var repassword = $('#repassword').val();
+		if(repassword==""||repassword==null){
+			formMsg('repassword', 0, '请输入确认密码');
+			//formMsg('repassword', 0, 'pleas enter the repeat password');
+			return false;
+		}else{
+			if(!mbTest_password.test(repassword)){
+				formMsg('repassword', 0, '{:L('login.denglumima')}格式错误 (6~16个字符)');
+				//formMsg('password', 0, '{:L('login.denglumima')} farmat error (6~16 characters long)');
+				return false;
+			}else{
+				if(password!=repassword){
+					//formMsg('repassword', 0, '确认登录错误');
+					formMsg('repassword', 0, 'confirm login error');
+					return false;
+				}else{
+					formMsg('repassword', 1);
+					return true;
+				}
+			}
+		}
+	}
+	
+
+	function Update(){
+		var username=$("#username").val();
+		var password=$("#password").val();
+		var repassword=$("#repassword").val();
+		var invit=$("#invit").val();
+		var verify=$("#verify").val();
+		if(username==""||username==null){
+			formMsg('username', 0, '{:L('login.shuruyonghuming')}');
+			return false;
+		}
+		if(password==""||password==null){
+			formMsg('password', 0, '请输入{:L('login.denglumima')}');
+			//formMsg('password', 0, 'pleas enter {:L('login.denglumima')}');
+			return false;
+		}
+		if(repassword==""||repassword==null){
+			formMsg('repassword', 0, '请输入确认密码');
+			//formMsg('repassword', 0, 'please enter the repeat password');
+			return false;
+		}
+		if(password!=repassword){
+			formMsg('repassword', 0, '确认密码错误');
+			//formMsg('repassword', 0, 'repeat password error');
+			return false;
+		}
+		
+		if(verify==""||verify==null){
+			formMsg('verify', 0, '{:L('login.shuruyanzhengma')}');
+			return false;
+		}
+		$.post("{:U('Login/upregister')}",{username:username,password:password,repassword:repassword,invit:invit,verify:verify},function(data){
+			if(data.status==1){
+				layer.msg(data.info,{icon:1});
+				$.cookies.set('cookie_username',username);
+				window.location='/Login/register2';
+			}else{
+				layer.msg(data.info,{icon:2});
+				if(data.url){
+					window.location=data.url;
+				}
+			}
+		},"json");
+	}
+	
+</script>
+
+<!--尾部文件-->
+<include file="Public:footer" />

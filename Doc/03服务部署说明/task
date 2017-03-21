@@ -1,0 +1,14 @@
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Admin/Login/queue >> /tmp/check_queue
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/index >> /tmp/index
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/move >> /tmp/move
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/houprice >> /tmp/houprice
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/tendency >> /tmp/tendency
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/chart  >> /tmp/chart
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/yichang  >> /tmp/yichang
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/qianbao  >> /tmp/qianbao
+* * * * * cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/paicuo >> /tmp/paicuo
+* * * * * sleep 10;cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/paicuo  >> /tmp/paicuo
+* * * * * sleep 20;cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/paicuo  >> /tmp/paicuo
+* * * * * sleep 30;cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/paicuo  >> /tmp/paicuo
+* * * * * sleep 40;cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/paicuo >> /tmp/paicuo
+* * * * * sleep 50;cd /home/wwwroot/btc;/usr/local/php/bin/php index.php Queue/paicuo  >> /tmp/paicuo

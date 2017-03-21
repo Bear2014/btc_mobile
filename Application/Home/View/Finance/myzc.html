@@ -1,0 +1,241 @@
+<include file="Public:header"/>
+<style>
+    .no_coin {
+        width: 700px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 20px;
+        border: 1px solid #d5d5d5;
+    }
+</style>
+<div class="autobox">
+    <div class="now">
+        <a href="/" class="orange">{:L('finance.shouye')}</a> &gt;
+        <a href="/finance/" class="orange">{:L('finance.caiwuzhongxin')}</a> &gt; {:L('finance.zhuanchuxunibi')}<b class="coin-name"></b>
+    </div>
+    <div class="assets_center clear po_re zin70">
+        <!--左侧菜单-->
+        <include file="Finance:left"/>
+        <!--右侧内容-->
+        <div class="assets_content w900 right bg_w">
+            <div class="safe_center clear" style="padding-left: 0px; border-bottom: 2px solid #e55600;">
+                <h1 style="margin-top: 0px; margin-bottom: 15px; line-height: 15px;">{:L('finance.zhuanchuxunibi')}</h1>
+            </div>
+            <div class="sj" style="top: 40px; left: 72px;"></div>
+            <notempty name="prompt_text">
+                <div class="mytips">
+                    <h6 style="color: #ff8000;">{:L('finance.wenxintishi')}</h6>
+                    {$prompt_text}
+                </div>
+            </notempty>
+            <br>
+
+            <div id="coin_active" class="weituo_bizhong">
+                <div class="bizhong_select">
+                    <div class="bz_btn">
+                        <img src="__UPLOAD__/coin/{$coin_list[$xnb]['img']}" alt="" style="width: 22px; float: left; margin-top: 7px; margin-right: 5px;"/><span id="coin-default"> <select name="type" id="myzc_type">
+                        <volist name="coin_list" id="vo">
+                            <eq name="xnb" value="$key">
+                                <option value="{$vo['name']}" selected="selected">{$vo.title} ({$vo['name']|strtoupper})</option>
+                                <else/>
+                                <option value="{$vo['name']}">{$vo.title} ({$vo['name']|strtoupper})</option>
+                            </eq>
+                        </volist>
+                    </select>
+      </span>
+                    </div>
+                </div>
+                <div class="bizhong_type" style="width: 220px;">
+                    <span>{:L('finance.keyong')}<em class="coin-name"></em>：<font class="coin-balance">{$user_coin[$xnb]|Num}</font></span>
+
+                </div>
+            </div>
+            <br>
+
+            <div class="choosepaymethod">
+                <empty name="zc_jz">
+                    <div class="choosebanks" style="margin-top: 20px;">
+                        <div class="methodway clearfix">
+                            <div class="w_div clearfix">
+                                <div class="w1">{:L('finance.zhuanchudizhi')}：</div>
+                                <div class="w2">
+                                    <select name="type" id="myzc_addr" style="width: 200px; height: 38px;border-radius: 8px;">
+                                        <option value="">--{:L('finance.jieshoudizhi')}--</option>
+                                        <volist name="userQianbaoList" id="vo">
+                                            <option value="{$vo.addr}">{$vo.name}</option>
+                                        </volist>
+                                        <option value="tianjia">{:L('finance.tianjiadizhi')}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w_div clearfix">
+                                <div class="w1">{:L('finance.zhuanchushuliang')}：</div>
+                                <div class="w2">
+                                    <input type="text" class="cztxinput" id="nums" value="" style="border-radius: 8px;"> <span style="color:#EA6647;">{:L('finance.zhuanchushouxufei')} {$coin_list[$xnb]['zc_fee']}%</span>
+                                </div>
+                            </div>
+                            <div class="w_div clearfix">
+                                <div class="w1">{:L('finance.duanxinyanzhengma')}：</div>
+                                <div class="w2">
+                                    <input type="text" class="cztxinput" id="moble_verify" value="" style="width: 70px;border-radius: 8px;">
+                                    <input id="regBtn" type="button" class="getyzm" value="{:L('finance.huoquyanzhengma')}" onclick="SendCode()" style="width: 108px;    height: 35px;"> <span style="color:#EA6647;">{:L('finance.jieshouduanxin')}{$moble}</span>
+                                </div>
+                            </div>
+                            <div class="w_div clearfix">
+                                <div class="w1">{:L('finance.jiaoyimima')}：</div>
+                                <div class="w2">
+                                    <input type="password" class="cztxinput" id="paypassword" value="" style="border-radius: 8px;">
+                                    <a href="{:U('Login/findpaypwd')}" class="reg_floatr" style="color:#EA6647;">{:L('finance.wangjimima')}?</a>
+                                </div>
+                            </div>
+                            <div class="w_div clearfix">
+                                <div class="w1">&nbsp;</div>
+                                <div class="w2">
+                                    <input type="button" class="btn-cztx" id="" onclick="Update()" value="{:L('finance.tijiao')}" title="{:L('finance.tijiao')}" style="border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <else/>
+                    <div class="cnyin_record">
+                        <div class="adr-zhuanru" style="position: relative;z-index:0;">
+                            <div id="pt-qrcode" style="position:absolute;top:0;right:0;display: inline-block;;">
+                                <div id="qrcode-wallet" style="display: inline-block;">
+                                    <saon id="codeaa"></saon>
+                                </div>
+                            </div>
+                            <div class="qb_dizhi ts">
+                                <p id="wallet">{$zc_jz}</p>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </empty>
+                <div class="f_body">
+                    <table class="f_table" id="investLog_content">
+                        <thead>
+                        <tr>
+                            <th width="">{:L('finance.zhuanchushijian')}</th>
+                            <th width="">{:L('finance.zhuanchubizhong')}</th>
+                            <th width="">{:L('finance.jieshoudizhi')}</th>
+                            <th width="">{:L('finance.zhuanchushuliang')}</th>
+                            <th width="">{:L('finance.zhuanchufeiyong')}</th>
+                            <th width="">{:L('finance.shijidaozhang')}</th>
+                            <th width="">{:L('finance.zhuangtai')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="list" id="vo">
+                            <tr>
+                                <td>{$vo.addtime|addtime}</td>
+                                <td>{$vo.coinname}</td>
+                                <td>{$vo.username}</td>
+                                <td>{$vo['num']|NumToStr}</td>
+                                <td>{$vo['fee']|NumToStr}</td>
+                                <td>{$vo['mum']|NumToStr}</td>
+                                <td>
+                                    <eq name="vo.status" value="1">
+                                        <font color="#23a800">{:L('finance.zhuanchuchenggong')} </font>
+                                        <else/>
+                                        {:L('finance.zhengzaichuli')}
+                                    </eq>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                    <div class="pages">{$page}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<script>
+    $("#myzc_type").change(function () {
+        var coin = $("#myzc_type option:selected").val();
+        window.location = '/Finance/myzc/coin/' + coin + '.html';
+    });
+
+    $("#myzc_addr").change(function () {
+        var coin = $("#myzc_type option:selected").val();
+        var type = $("#myzc_addr option:selected").val();
+        if (type == 'tianjia') {
+            window.location = '/User/qianbao?coin=' + coin;
+        }
+    });
+
+    function SendCode() {
+        $('#regBtn').attr("disabled", "disabled");
+        $.post("{:U('Verify/myzc')}", {}, function (data) {
+            if (data.status == 1) {
+                layer.msg(data.info, {icon: 1});
+                var obj = $('#regBtn');
+                var wait = 60;
+                var interval = setInterval(function () {
+                    obj.css('backgroundColor', '#999B9C');
+                    obj.val(wait + '秒再次发送');
+                    wait--;
+                    if (wait < 0) {
+                        clearInterval(interval);
+                        obj.val('{:L('finance.huoquyanzhengma')}');
+                        obj.css('backgroundColor', '#0096e0');
+                    }
+                    ;
+                }, 1000);
+            }
+        }, "json");
+    }
+
+    function Update() {
+        var coin = "{$xnb}";
+        var addr = $('#myzc_addr option:selected').val();
+        var num = $("#nums").val();
+        var moble_verify = $("#moble_verify").val();
+        var paypassword = $("#paypassword").val();
+
+        if (addr == "" || addr == null) {
+            layer.tips('请选择钱包', '#myzc_addr', {tips: 3});
+            return false;
+        }
+
+        if (moble_verify == "" || moble_verify == null) {
+            layer.tips('请输入{:L('finance.duanxinyanzhengma')}', '#moble_verify', {tips: 3});
+            return false;
+        }
+
+        if (num == "" || num == null) {
+            layer.tips('请输入{:L('finance.zhuanchushuliang')}', '#nums', {tips: 3});
+            return false;
+        }
+
+        if (paypassword == "" || paypassword == null) {
+            layer.tips('请输入{:L('finance.jiaoyimima')}', '#paypassword', {tips: 3});
+            return false;
+        }
+
+        $.post("{:U('Finance/upmyzc')}", {
+            coin: coin,
+            addr: addr,
+            num: num,
+            paypassword: paypassword,
+            moble_verify: moble_verify
+        }, function (data) {
+            if (data.status == 1) {
+                layer.msg(data.info, {icon: 1});
+                window.location = "{:U('Finance/myzc')}?coin=" + coin;
+            } else {
+                layer.msg(data.info, {icon: 2});
+            }
+        }, "json");
+
+    }
+</script>
+<script>
+    //菜单高亮
+    $('#finance_box').addClass('active');
+    $('#finance_myzc').addClass('active');
+    $('#finance_myzc i').attr('class', 'coin_menu_op_5');
+</script>
+<include file="Public:footer"/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

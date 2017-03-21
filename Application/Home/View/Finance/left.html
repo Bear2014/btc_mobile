@@ -1,0 +1,37 @@
+<div class="coin_menu">
+	<div class="coin_menu_box">
+		<ul>
+			<li id="finance_index"><i class="coin_menu_op_0_1"></i><a href="/finance/index.html">{:L('finance.caiwuzhongxin')}</a></li>
+		</ul>
+	</div>
+	<div class="coin_menu_box">
+		<ul>
+			<li id="finance_mycz"><i class="coin_menu_op_18_1"></i><a href="/finance/mycz.html">{:L('finance.renminbichongzhi')}</a></li>
+			<li id="finance_mytx"><i class="coin_menu_op_2_1"></i><a href="/finance/mytx.html">{:L('finance.renminbitixian')}</a></li>
+			
+		</ul>
+	</div>
+	<div class="coin_menu_box">
+		<ul>
+			<li id="finance_myzr"><i class="coin_menu_op_4_1"></i><a href="/finance/myzr.html">{:L('finance.zhuanruxunibi')}</a></li>
+			<li id="finance_myzc"><i class="coin_menu_op_5_1"></i><a href="/finance/myzc.html">{:L('finance.zhuanchuxunibi')}</a></li>
+		</ul>
+	</div>
+	<div class="coin_menu_box">
+		<ul>
+			<li id="finance_mywt"><i class="coin_menu_op_6_1"></i><a href="/finance/mywt.html">{:L('finance.weituoguanli')}</a></li>
+			<li id="finance_mycj"><i class="coin_menu_op_7_1"></i><a href="/finance/mycj.html">{:L('finance.chengjiaochaxun')}</a></li>
+		</ul>
+	</div>
+	<div class="coin_menu_box">
+		<ul>
+            <li id="finance_mytj"><i class="coin_menu_op_13_1"></i><a href="/finance/mytj.html">{:L('finance.tuijianyonghu')}</a></li>
+			<li id="finance_mywd"><i class="coin_menu_op_16_1"></i><a href="/finance/mywd.html">{:L('finance.wodetuijian')}</a></li>
+			<li id="finance_myjp"><i class="coin_menu_op_19_1"></i><a href="/finance/myjp.html">{:L('finance.wodejiangpin')}</a></li>
+		</ul>
+	</div>
+</div>
+<script>
+	//顶部菜单高亮
+	$('.coin_menu_box a').hover(function(){var str=str_1=$(this).parent().find('i').attr('class');if(str.length>15)str=str.substring(0,str.length-2);$(this).parent().find('i').attr('class',str)},function(){$(this).parent().find('i').attr('class',str_1)});
+</script>

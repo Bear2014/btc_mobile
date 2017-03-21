@@ -1,0 +1,126 @@
+<include file="Public:header" />
+<div class="autobox" id="reg-step4">
+	<div class="login_step">
+		<ul class="order clear">
+			<li><i class="order_1"></i>{:L('login.yonghuzhuce')}<div class="order_line"></div></li>
+			<li><i class="order_2"></i>{:L('login.shezhijiaoyimima')}<div class="order_line"></div></li>
+			<li><i class="order_3"></i>{:L('login.shimingrenzheng')}<div class="order_line"></div></li>
+			<li class="orange"><i class="order_4_1"></i>{:L('login.success')}</li>
+		</ul>
+	</div>
+	<div class="reg_box">
+		<div class="reg_su">
+			<div class="reg_su_title">{:L('login.chenggong')}</div>
+
+			<div class="reg_info">
+				<ul>
+					<li>{:L('login.yonghuming')}：<span id="reg-email">{$user.username}</span></li>
+					<li>{:L('login.renzhengmingxing')}：<span id="reg-name">{$user.truename}</span></li>
+					<li>{:L('login.zhengjianhaoma')}<span id="reg-id_number">{$user.idcard}</span></li>
+				</ul>
+				<div class="auto_btn marb15">
+					<a href="{:U('finance/index')}" class="center">{:L('login.qujiaoyi')}</a>
+					<div class="right_side"></div>
+				</div>
+				<div class="reg_otherlink">
+					{:L('login.nihaikeyi')}
+					<a href="/user/ga.html" target="_blank">{:L('login.kaiqishuangchongyanzheng')}</a>　
+					<a href="{:U('User/moble')}" target="_blank">{:L('login.bandingshouji')}</a>　
+					<a href="{:U('Finance/mycz')}" target="_blank">{:L('login.chongzhi')}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="autobox" style="margin-bottom: 30px">
+	<ul class="safety_tips_ul clear">
+		<li>
+			<div class="safety_img safety_img_1"></div>
+			<h4>{:L('login.xitongkekao')}</h4>
+			<p>{:L('login.jiaoyianquan')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_2"></div>
+			<h4>{:L('login.zijinanquan')}</h4>
+			<p>{:L('login.zijinanquanmiaoshu')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_3"></div>
+			<h4>{:L('login.kuaijiefangbian')}</h4>
+			<p>{:L('login.gaoxingnengjiaoyi')}</p>
+		</li>
+		<li>
+			<div class="safety_img safety_img_4"></div>
+			<h4>{:L('login.fuwuzhuanye')}</h4>
+			<p>{:L('login.zhuanyekefufuwu')}</p>
+		</li>
+	</ul>
+</div>
+<script>
+	$('input').focus(function(){
+		var t=$(this);
+		if(t.attr('type')=='text'||t.attr('type')=='password')
+			t.css({'box-shadow':'0px 0px 3px #1583fb','border':'1px solid #1583fb','color':'#333' });
+		if(t.val()==t.attr('placeholder'))
+			t.val('');
+	});
+	$('input').blur(function(){
+		var t=$(this);
+		if(t.attr('type')=='text'||t.attr('type')=='password')
+			t.css({'box-shadow':'none','border':'1px solid #e1e1e1','color':'#333' });
+		if(t.attr('type')!='password'&&!t.val())
+			t.val(t.attr('placeholder'));
+	});
+	$('.reg_input_box input').each(function(i,d){
+		$(d).focus(function(){
+			var oRegMsg=$('#'+$(this).attr('id')+'-msg');
+			oRegMsg.attr('class')=='form_explain_error'?oRegMsg.attr('class','form_explain').html(oRegMsg.attr('data-explain')).show():oRegMsg.show();
+		})
+		$(d).blur(function(){
+			var oRegMsg=$('#'+$(this).attr('id')+'-msg');
+			$(this).parent().find('.form_explain').hide();
+		})
+	})
+	var mbTest_username=/^(?![^a-zA-Z]+$)(?!\D+$).{5,15}$/;
+	var mbTest_password=/^[a-zA-Z0-9_]{5,15}$/;
+	//输入框消息
+	function formMsg(o, status, msg){
+		$('#'+o+'-msg').attr('class', 'form_explain_'+(status?'pass':'error')).html((typeof msg == 'undefined'? '': msg)+'<em></em>').show();
+		return true;
+	}
+
+
+	function Update(){
+		var truename=$("#regtruename").val();
+		var idcard=$("#regidcard").val();
+
+		/*
+		if(truename==""||truename=null){
+			formMsg('truename', 0, '请输入真实姓名');
+			return false;
+		}*/
+		if(idcard==""||idcard==null){
+			formMsg('idcard', 0, '{:L('login.qingshurushenfenzhenghao')}');
+			return false;
+		}
+
+
+		$.post("{:U('Login/upregister3')}",{truename:truename,idcard:idcard},function(data){
+			if(data.status==1){
+				layer.msg(data.info,{icon:1});
+				window.location='/Login/register4';
+			}else{
+				layer.msg(data.info,{icon:2});
+				if(data.url){
+					window.location=data.url;
+				}
+			}
+		},"json");
+	}
+	
+	
+	
+	
+	
+</script>
+<include file="Public:footer" />

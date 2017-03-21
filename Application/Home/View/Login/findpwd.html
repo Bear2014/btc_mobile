@@ -1,0 +1,190 @@
+<include file="Public:header" />
+<div class="wrapper">
+	<div class="register" style="border-radius: 15px; margin-bottom: 20px;">
+		<table>
+			<tbody>
+				<tr>
+					<th align="right">{:L('login.yonghuming')}：</th>
+					<td><div class="formbody" style="width: 250px;">
+							<i class="icon_username"></i>
+							<input type="text" class="username" id="username" name="username" placeholder="{:L('login.shuruyonghuming')}">
+						</div></td>
+				</tr>
+				<tr>
+					<th align="right">{:L('login.anquanshouji')}：</th>
+					<td><div class="formbody">
+							<i class="icon_phone"></i>
+							<input type="text" class="code" id="areaCode" name="areaCode" value="86" placeholder="区号" style="width: 40px;">-
+							<input type="text" class="username" id="moble" name="moble" placeholder="{:L('login.shurubangdinghaoma')}" style="width: 152px;">
+						</div></td>
+				</tr>
+				<tr>
+					<th align="right">{:L('login.tuxingyanzhengma')}：</th>
+					<td><div class="formbody">
+							<i class="icon_code"></i>
+							<input type="text" class="code" id="verify" name="code" placeholder="{:L('login.shuruyanzhengma')}" style="width: 100px;"><img id="codeImg" src="{:U('Verify/code')}" width="145" height="42" onclick="this.src=this.src+'?t='+Math.random()" style="float: left; cursor: pointer;" title="换一张">
+						</div></td>
+				</tr>
+				<tr>
+					<th align="right">{:L('login.duanxinyanzhengma')}：</th>
+					<td><div class="formbody">
+							<i class="icon_code"></i>
+							<input type="text" class="code" id="moble_verify" name="code" placeholder="{:L('login.shuruduanxinyanzhengma')}" style="width: 100px;"><input id="regBtn" type="button" class="getyzm" value="{:L('login.huoquyanzhengma')}" onclick="SendCode()" style="width: 145px; height: 42px;">
+						</div></td>
+				</tr>
+				<tr>
+					<th align="right">{:L('login.xindenglumima')}：</th>
+					<td><div class="formbody" style="width: 250px;">
+							<i class="icon_password"></i>
+							<input type="password" class="password" id="password" name="password" placeholder="{:L('login.6dao16gezifu')}">
+						</div></td>
+				</tr>
+				<tr>
+					<th align="right">{:L('login.querendenglumima')}：</th>
+					<td><div class="formbody" style="width: 250px;">
+							<i class="icon_password"></i>
+							<input type="password" class="password" id="repassword" name="password" placeholder="{:L('login.shuruquerendenglumima')}">
+							<!--
+							<input type="password" class="password" id="repassword" name="password" placeholder="请再次输入{:L('login.denglumima')}">
+							-->
+						</div></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td><div class="formbody">
+							<input type="button" class="movesay_btn" name="index_submit" id="Submin" onclick="Update();" value="{:L('login.zhaohuidenglumima')}" title="{:L('login.zhaohuidenglumima')}" style="width: 320px;">
+						</div></td>
+					<td>&nbsp;</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="autobox" style="margin-bottom: 30px">
+		<ul class="safety_tips_ul clear">
+			<li>
+				<div class="safety_img safety_img_1"></div>
+				<h4>{:L('login.xitongkekao')}</h4>
+				<p>{:L('login.jiaoyianquan')}</p>
+			</li>
+			<li>
+				<div class="safety_img safety_img_2"></div>
+				<h4>{:L('login.zijinanquan')}</h4>
+				<p>{:L('login.zijinanquan')}</p>
+			</li>
+			<li>
+				<div class="safety_img safety_img_3"></div>
+				<h4>{:L('login.kuaijiefangbian')}</h4>
+				<p>{:L('login.gaoxingnengjiaoyi')}</p>
+			</li>
+			<li>
+				<div class="safety_img safety_img_4"></div>
+				<h4>{:L('login.fuwuzhuanye')}</h4>
+				<p>{:L('login.zhuanyekefufuwu')}</p>
+			</li>
+		</ul>
+	</div>
+</div>
+<script>
+	function SendCode(){
+		var username=$("#username").val();
+		var areaCode=$("#areaCode").val();
+		var moble=$("#moble").val();
+		var verify=$("#verify").val();
+		
+		if(username==null||username==""){
+			layer.tips('{:L('login.shuruyonghuming')}','#username',{tips:3});
+			return false;
+		}
+		if(areaCode==null||areaCode==""){
+			layer.tips('请输入区号','#areaCode',{tips:3});
+			return false;
+		}
+		if(moble==null||moble==""){
+			layer.tips('请输入手机号码','#moble',{tips:3});
+			return false;
+		}
+		if(verify==""||verify==null){
+			layer.tips('请输入{:L('login.tuxingyanzhengma')}','#verify',{tips:3});
+			return false;
+		}
+
+
+		$.post("{:U('Verify/findpwd')}",{username:username,moble:areaCode+moble,verify:verify},function(data){
+			if(data.status==1){
+				$('#regBtn').attr("disabled","disabled");
+				layer.msg(data.info,{icon:1});
+				var obj=$('#regBtn');
+				var wait=120;
+				var interval=setInterval(function(){
+					obj.css('backgroundColor','#999B9C');
+					obj.val('（'+wait+'）秒后再次发送');
+					wait--;
+					if(wait<0){
+						clearInterval(interval);
+						obj.val('{:L('login.huoquyanzhengma')}');
+						obj.css('backgroundColor','#0096e0');
+					}
+					;
+				},1000);
+			}else{
+				layer.msg(data.info,{icon:2});
+			}
+		},"json");
+	}
+	function Update(){
+		var username=$("#username").val();
+		var areaCode=$("#areaCode").val();
+		var moble=$("#moble").val();
+		var moble_verify=$("#moble_verify").val();
+		var verify=$("#verify").val();
+		var password=$("#password").val();
+		var repassword=$("#repassword").val();
+		
+		if(username==null||username==""){
+			layer.tips('{:L('login.shuruyonghuming')}','#username',{tips:3});
+			return false;
+		}
+		if(areaCode==null||areaCode==""){
+			layer.tips('请输入区号','#areaCode',{tips:3});
+			return false;
+		}
+		if(moble==null||moble==""){
+			layer.tips('请输入手机号码','#moble',{tips:3});
+			return false;
+		}
+		if(moble_verify==null||moble_verify==""){
+			layer.tips('请输入{:L('login.duanxinyanzhengma')}','#moble_verify',{tips:3});
+			return false;
+		}
+		if(verify==null||verify==""){
+			layer.tips('请输入{:L('login.tuxingyanzhengma')}','#verify',{tips:3});
+			return false;
+		}
+		if(password==null||password==""){
+			layer.tips('请输入新{:L('login.denglumima')}','#password',{tips:3});
+			return false;
+		}
+		if(repassword==null||repassword==""){
+			layer.tips('请输入确认{:L('login.denglumima')}','#repassword',{tips:3});
+			return false;
+		}
+		if(password!=repassword){
+			layer.tips('确认{:L('login.denglumima')}错误','#repassword',{tips:3});
+			return false;
+		}
+		$.post("{:U('Login/findpwd')}",{username:username,moble:areaCode+moble,moble_verify:moble_verify,verify:verify,password:password,repassword:repassword},function(data){
+			if(data.status==1){
+				layer.msg(data.info,{icon:1});
+				window.setTimeout("window.location='{:U('Login/index')}'",1000);
+			}else{
+				layer.msg(data.info,{icon:2});
+			}
+		},"json");
+	}
+</script>
+<script>
+	//顶部菜单高亮
+	$('#menu_top_index').addClass('current');
+</script>
+<include file="Public:footer" />

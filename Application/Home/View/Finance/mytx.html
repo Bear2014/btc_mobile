@@ -1,0 +1,243 @@
+<include file="Public:header"/>
+<div class="autobox">
+	<div class="now">
+		<a href="/" class="orange">{:L('finance.shouye')}</a> &gt; <a href="/finance/" class="orange">{:L('finance.caiwuzhongxin')}</a> &gt; {:L('finance.renminbitixian')}
+	</div>
+	<div class="assets_center clear po_re zin70">
+		<!--左侧菜单-->
+		<include file="Finance:left"/>
+		<!--右侧内容-->
+		<div class="assets_content w900 right bg_w">
+			<div class="safe_center clear" style="padding-left: 0px; border-bottom: 2px solid #E55600;">
+				<h1 style="margin-top: 0px; margin-bottom: 15px; line-height: 15px;">{:L('finance.renminbitixian')}</h1>
+			</div>
+			<div class="sj" style="top: 40px; left: 72px;"></div>
+			<notempty name="prompt_text">
+				<div class="mytips">
+					<h6 style="color: #FF8000;">{:L('finance.wenxintishi')}</h6>
+					{$prompt_text}
+				</div>
+			</notempty>
+			<div class="choosepaymethod">
+				<div class="choosebanks" style="margin-top: 10px;">
+					<div class="methodway clearfix">
+						<div class="w_div clearfix">
+							<div class="w1">{:L('finance.zhanghuyue')}：</div>
+							<div class="w2" style="color: #333;">
+								<img src="__PUBLIC__/Home/images/coin_rmb.png" alt="" style="width: 18px; float: left; margin-top: 8px; margin-right: 5px;"/>
+								<span>{:L('finance.keyongrenminbi')}(CNY):<font class="coin-balance" style="    color: #690!important;">{$user_coin['cny']|NumToStr}</font></span>
+								<apan>
+								</apan>
+							</div>
+						</div>
+						<div class="w_div clearfix">
+							<div class="w1">{:L('finance.tixiandizhi')}：</div>
+							<div class="w2">
+								<select name="type" id="mytx_type" style="width: 200px; height: 38px;border-radius: 8px;">
+									<option value="">--{:L('finance.tixiandizhi')}--</option>
+									<volist name="userBankList" id="vo">
+										<option value="{$vo.id}">{$vo.name}</option>
+									</volist>
+									<option value="tianjia">{:L('finance.tianjiatixiandizhi')}</option>
+								</select>
+							</div>
+						</div>
+						<div class="w_div clearfix">
+							<div class="w1">{:L('finance.tixianjine')}：</div>
+							<div class="w2">
+								<input type="text" class="cztxinput" id="num" value="" style="border-radius: 8px;">
+								<span style="color:#EA6647;">{:L('finance.tixianshouxufei')}{:C('mytx_fee')}%</span> 
+
+
+							</div>
+						</div>
+						<div class="w_div clearfix">
+							<div class="w1">{:L('finance.duanxinyanzhengma')}：</div>
+							<div class="w2">
+								<input type="text" class="cztxinput" id="moble_verify" value="" style="width: 70px;border-radius: 8px;">
+								<input id="regBtn" type="button" class="getyzm" value="{:L('finance.huoquyanzhengma')}" onclick="SendCode()" style="width: 108px;    height: 35px;"> <span style="color:#EA6647;">{:L('finance.jieshouduanxin')}{$moble}</span>
+							</div>
+						</div>
+						<div class="w_div clearfix">
+							<div class="w1">{:L('finance.jiaoyimima')}：</div>
+							<div class="w2">
+								<input type="password" class="cztxinput" id="paypassword" name="paypassword" autocomplete="off" style="border-radius: 8px;">
+								<a href="{:U('Login/findpaypwd')}" class="reg_floatr" style="color:#EA6647;">{:L('finance.wangjimima')}?</a>
+							</div>
+						</div>
+						<input type="hidden" id="type" value="支付宝">
+						<div class="w_div clearfix">
+							<div class="w1">&nbsp;</div>
+							<div class="w2">
+								<input type="button" class="btn-cztx" id="" onclick="Update()" value="{:L('finance.tijiao')}" title="{:L('finance.tijiao')}" style="border-radius: 8px;">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="f_body">
+					<table class="f_table" id="investLog_content">
+						<thead>
+						<tr>
+							<th>{:L('finance.tixianshijian')}</th>
+							<th>{:L('finance.tixianjine')}</th>
+							<th>{:L('finance.shouxufei')}</th>
+							<th>{:L('finance.daozhangjine')}</th>
+							<th>{:L('finance.tixiandizhi')}</th>
+							<th width=""><select name="status-selectTest" id="status-selectTest">
+								<option value="0"
+								<eq name="status" value="0">selected</eq>
+								>{:L('finance.zhuangtai')}</option>
+								<option value="1"
+								<eq name="status" value="1">selected</eq>
+								>{:L('finance.yishenqing')}</option>
+								<option value="2"
+								<eq name="status" value="2">selected</eq>
+								>{:L('finance.tixianchenggong')}</option>
+								<option value="3"
+								<eq name="status" value="3">selected</eq>
+								>{:L('finance.yichexiao')}</option>
+								<option value="4"
+								<eq name="status" value="4">selected</eq>
+								>{:L('finance.zhengzaichuli')}</option>
+							</select></th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name="list" id="vo">
+							<tr>
+								<td>{$vo['addtime']|date='Y-m-d H:i:s',###}</td>
+								<td>{$vo['num']|default="0.00"}</td>
+								<td>{$vo['fee']|default="0.00"}</td>
+								<td>{$vo['mum']|default="0.00"}</td>
+								<td>{$vo['name']}</td>
+								<td>
+									<eq name="vo.status" value="0">
+										{:L('finance.yishenqing')}
+										<a onclick="mytxChexiao({$vo['id']})" href="javascript:void(0)" style="    color: #2674FF!important;">{:L('finance.chexiao')}</a>
+									</eq>
+									<eq name="vo.status" value="1">
+										{:L('finance.tixianchenggong')}
+									</eq>
+									<eq name="vo.status" value="2">
+										{:L('finance.yichexiao')}
+									</eq>
+									<eq name="vo.status" value="3">
+										{:L('finance.zhengzaichuli')}
+									</eq>
+								</td>
+							</tr>
+						</volist>
+						</tbody>
+					</table>
+					<div class="pages">{$page}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div><br><br>
+<script>
+	$("#status-selectTest").change(function () {
+		var status = $("#status-selectTest option:selected").val();
+		window.location = '/Finance/mytx/status/' + status + '/.html';
+	});
+
+
+	$("#mytx_type").change(function () {
+		var type = $("#mytx_type option:selected").val();
+		if (type == 'tianjia') {
+			window.location = '/User/bank.html';
+		}
+	});
+
+	function mytxChexiao(id) {
+		$.post("{:U('Finance/mytxChexiao')}", {id: id}, function (data) {
+			if (data.status == 1) {
+				layer.msg(data.info, {icon: 1});
+				window.location.reload();
+			} else {
+				layer.msg(data.info, {icon: 2});
+			}
+		}, "json");
+	}
+
+
+	function SendCode() {
+
+
+		$('#regBtn').attr("disabled", "disabled");
+		$.post("{:U('Verify/mytx')}", {}, function (data) {
+			if (data.status == 1) {
+				layer.msg(data.info, {
+					icon: 1
+				});
+				var obj = $('#regBtn');
+				var wait = 120;
+				var interval = setInterval(function () {
+					obj.css('backgroundColor', '#999B9C');
+					obj.val(wait + '秒再次发送');
+					wait--;
+					if (wait < 0) {
+						clearInterval(interval);
+						obj.val('{:L('finance.huoquyanzhengma')}');
+						obj.css('backgroundColor', '#0096e0');
+					}
+					;
+				}, 1000);
+			} else {
+				layer.msg(data.info, {
+					icon: 2
+				});
+			}
+		}, "json");
+	}
+	function Update() {
+		var num = $("#num").val();
+		var paypassword = $("#paypassword").val();
+		var moble_verify = $("#moble_verify").val();
+		var type = $('#mytx_type option:selected').val();
+		if (moble_verify == "" || moble_verify == null) {
+			layer.tips('请输入{:L('finance.duanxinyanzhengma')}', '#moble_verify', {
+				tips: 3
+			});
+			return false;
+		}
+		if (num == "" || num == null) {
+			layer.tips('请输入{:L('finance.tixianjine')}', '#num', {
+				tips: 3
+			});
+			return false;
+		}
+		if (paypassword == "" || paypassword == null) {
+			layer.tips('请输入{:L('finance.jiaoyimima')}', '#paypassword', {
+				tips: 3
+			});
+			return false;
+		}
+		$.post("{:U('Finance/mytxUp')}", {
+			type: type,
+			num: num,
+			paypassword: paypassword,
+			moble_verify: moble_verify
+		}, function (data) {
+			if (data.status == 1) {
+				layer.msg(data.info, {
+					icon: 1
+				});
+				window.location.reload();
+			} else {
+				layer.msg(data.info, {
+					icon: 2
+				});
+				if (data.url) {
+					window.location = data.url;
+				}
+			}
+		}, "json");
+	}
+</script>
+<script>
+	$('#finance_box').addClass('active');
+	$('#finance_mytx').addClass('active');
+	$('#finance_mytx i').attr('class', 'coin_menu_op_2');
+</script>
+<include file="Public:footer"/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               

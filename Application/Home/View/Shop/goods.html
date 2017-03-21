@@ -1,0 +1,240 @@
+<include file="Public:header"/>
+<script type="text/javascript" src="__PUBLIC__/Home/js/cityselect.js"></script>
+<div class="autobox" style=" ">
+    <div class="f_title clearfix">
+        <div class="f_title_span left" style="    margin-top: 20px;">
+						<span class="">
+
+							<a href="{:U('Shop/index')}">{:L('shop.guangshangcheng')}</a>
+						</span>
+						<span class="">
+							<a href="{:U('Shop/log')}">{:L('shop.gouwujilu')}</a>
+						</span>
+                        <span class="current">
+                            <i></i>
+							<a href="{:U('Shop/goods')}">{:L('shop.shouhuodizhi')}</a>
+						</span>
+        </div>
+    </div>
+    <notempty name="prompt_text">
+        <div class="mytips" style="    margin: 0px;">
+            <h6 style="color: #ff8000;">{:L('shop.wenxintishi')}</h6>
+            {$prompt_text}
+        </div>
+    </notempty>
+    <div class="category-nav" style="padding-bottom: 1px;">
+    </div>
+</div>
+<div class="wrapbody">
+    <div class="main">
+        <div class="myright" style="width: 1168px;">
+            <div class="wraphtml">
+
+
+                    <div class="f_body">
+                        <div class="f_body_main">
+                            <div class="f_tab_body">
+                                <div>
+                                    <table class="f_table" id="investLog_content">
+                                        <thead>
+                                        <tr>
+                                            <th>{:L('shop.beizhumingcheng')}</th>
+                                            <th>{:L('shop.lianxixingming')}</th>
+                                            <th>{:L('shop.shenfenzhenghao')}</th>
+                                            <th>{:L('shop.lianxidianhua')}</th>
+                                            <th>{:L('shop.xiangxidizhi')}</th>
+                                            <th>{:L('shop.tianjiashijian')}</th>
+                                            <th>{:L('shop.caozuo')}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="userGoodsList" id="vo">
+                                            <tr>
+                                                <td>{$vo.name}</td>
+                                                <td>{$vo.truename}</td>
+                                                <td>{$vo.idcard}</td>
+                                                <td>{$vo.moble}</td>
+                                                <td>{$vo.addr}</td>
+                                                <td>{$vo.addtime|addtime}</td>
+                                                <td>
+                                                    <a class="cancel" href="javascript:void(0)" onclick="UpdateB({$vo['id']})">{:L('shop.shanchu')}</a>
+                                                </td>
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+                                    </table>
+                                    <div class="pages">
+                                        <a href="javascript:void(0)" onclick="showA()">{:L('shop.tianjiayigedizhi')}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+</div></div>
+        </div>
+
+</div>
+<div class="okcoinPop" id="withdrawCnyAddress" style="display: none;">
+    <div class="dialog_content" id="dialog_content_CnyAddress" style="margin-left: -200px; margin-top: 200px; left: 50%; top: 21px;">
+        <div class="dialog_title" id="dialog_title_CnyAddress">
+            <span id="CnyAddressTitle">{:L('shop.lianxidizhi')}</span>
+            <a href="javascript:closeAddress();" class="dialog_closed" title="{:L('shop.guanbi')}"></a>
+        </div>
+        <div class="dialog_body center">
+            <div style="line-height: 35px; text-align: left; padding-left: 50px;">
+                <ul class="PopLayer">
+                    <li>
+                        <span class="c2" id="lotteryAmountSpan1">{:L('shop.dizhibeizhu')}:</span>
+                        <input name="name" id="goods_name" type="text" class="cztxinput" style="width: 200px; padding: 2px; padding-bottom: 5px;">
+                    </li>
+                    <li>
+                        <span class="c2" id="lotteryAmountSpan2">{:L('shop.lianxixingming')}:</span>
+                        <input name="name" id="goods_truename" type="text" class="cztxinput" style="width: 200px; padding: 2px; padding-bottom: 5px;">
+                    </li>
+                    <li>
+                        <span class="c2" id="lotteryAmountSpan3">{:L('shop.shenfenzhenghao')}:</span>
+                        <input name="name" id="goods_idcard" type="text" class="cztxinput" style="width: 200px; padding: 2px; padding-bottom: 5px;">
+                    </li>
+                    <li>
+                        <span class="c2" id="lotteryAmountSpan4">{:L('shop.lianxidianhua')}:</span>
+                        <input name="name" id="goods_moble" type="text" class="cztxinput" style="width: 200px; padding: 2px; padding-bottom: 5px;">
+                    </li>
+                    <li>
+                        <span class="c2" id="lotteryAmountSpan5">{:L('shop.songhuodizhi')}:</span>
+                        <input name="name" id="goods_addr" type="text" class="cztxinput" style="width: 200px; padding: 2px; padding-bottom: 5px;">
+                    </li>
+                    <li>
+                        <span class="c2" id="lotteryAmountSpan6">{:L('shop.jiaoyimima')}:</span>
+                        <input name="name" id="goods_paypassword" type="password" class="cztxinput" style="width: 100px; padding: 2px; padding-bottom: 5px;">
+                        <a href="/Login/findpaypwd.html" class="reg_floatr">{:L('shop.wangji')}?</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="Update()" class="btn" id="btn" style="">{:L('shop.lijitianjia')}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialogBoxShadow" style="position: absolute; top: 0px; left: 0px; z-index: 100; background-color: rgb(0, 0, 0); opacity: 0.4; width: 100%; background-position: initial initial; background-repeat: initial initial; display: none;"></div>
+<br>
+
+<script>
+
+
+    var coin = "{$xnb}";
+
+
+    $("#city_1").citySelect({
+        nodata: "none",
+        required: false
+    });
+
+    $('#dialogBoxShadow').height($(document).height());
+    function closeAddress() {
+        $("#withdrawCnyAddress").hide();
+        $("#dialogBoxShadow").hide();
+    }
+    function showA() {
+        $("#withdrawCnyAddress").show();
+        $("#dialogBoxShadow").show();
+    }
+    function Update() {
+        var name = $('#goods_name').val();
+        var truename = $('#goods_truename').val();
+        var idcard = $('#goods_idcard').val();
+        var moble = $('#goods_moble').val();
+        var addr = $('#goods_addr').val();
+        var paypassword = $('#goods_paypassword').val();
+
+
+        if (name == "" || name == null) {
+            layer.tips('{:L('shop.beizhumingcheng')}', '#goods_name', {tips: 3});
+            return false;
+        }
+        if (truename == "" || truename == null) {
+            layer.tips('{:L('shop.lianxixingming')}', '#goods_truename', {tips: 3});
+            return false;
+        }
+        if (moble == "" || moble == null) {
+            layer.tips('{:L('shop.lianxidianhua')}', '#goods_moble', {tips: 3});
+            return false;
+        }
+        if (idcard == "" || idcard == null) {
+            layer.tips('{:L('shop.shurushenfenzhenghao')}', '#goods_idcard', {tips: 3});
+            return false;
+        }
+
+        if (addr == "" || addr == null) {
+            layer.tips('{:L('shop.shulianxidizhi')}', '#goods_addr', {tips: 3});
+            return false;
+        }
+        if (paypassword == "" || paypassword == null) {
+            layer.tips('{:L('shop.jiaoyimima')}', '#goods_paypassword', {tips: 3});
+            return false;
+        }
+
+
+        $.post("{:U('Shop/upgoods')}", {
+            name: name,
+            truename: truename,
+            moble: moble,
+            addr: addr,
+            idcard: idcard,
+            paypassword: paypassword
+        }, function (data) {
+            if (data.status == 1) {
+                layer.msg(data.info, {icon: 1});
+                window.location = "{:U('Shop/goods')}";
+            } else {
+                layer.msg(data.info, {icon: 2});
+                if (data.url) {
+                    window.location = data.url;
+                }
+            }
+        }, "json");
+    }
+
+    function UpdateB(id) {
+        layer.config({
+            extend: 'extend/layer.ext.js'
+        });
+        layer.ready(function () {
+            //默认prompt
+            layer.prompt({
+                title: '{:L('shop.querenmima')}',
+                formType: 1
+            }, function (val) {
+                if (val) {
+                    //需要执行的方法
+                    $.post("{:U('Game/shop_delgoods')}", {
+                        id: id,
+                        paypassword: val
+                    }, function (data) {
+                        if (data.status == 1) {
+                            layer.msg(data.info, {icon: 1});
+                            window.location = "{:U('Game/shop_goods')}";
+                        } else {
+                            layer.msg(data.info, {icon: 2});
+                            if (data.url) {
+                                window.location = data.url;
+                            }
+                        }
+                    }, "json");
+
+
+                }
+                ;
+            });
+
+        });
+
+
+    }
+</script>
+<script>
+    //菜单高亮
+    $('#shop_box').addClass('active');
+</script>
+<include file="Public:footer"/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    

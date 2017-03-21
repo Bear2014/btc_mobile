@@ -1,0 +1,175 @@
+<include file="Public:header" />
+	
+    
+<div class="autobox">
+	<div class="now">
+		<a href="/" class="orange">{:L('finance.shouye')}</a> &gt; {:L('finance.caiwuzhongxin')}
+	</div>
+	<div class="assets_center clear po_re zin70">
+		
+		<include file="Finance:left" />
+		
+		
+		<div class="assets_content w900 right bg_w">
+            <div id="widget" style="top: 0px;background: #ffffff;width: 950px;border-right: 1px solid #d5d5d5;">
+   
+                <div class="safe_center clear" style="padding-left: 0px; border-bottom: 2px solid #e55600;">
+    <h1 style="margin-top: 0px; margin-bottom: 15px; line-height: 15px;">{:L('finance.caiwuzhongxin')}</h1>
+   </div>
+   <div class="sj" style="top: 40px; left: 60px;"></div>
+                <notempty name="prompt_text">
+                    <div class="mytips">
+                        <h6 style="color: #ff8000;">{:L('finance.wenxintishi')}</h6>
+                        <!--
+                        {:L('finance.prompt_text')}
+                        -->
+                        
+                        {$prompt_text}
+                        
+                    </div>
+                </notempty>
+
+                
+                
+                <div class="coin_style_box">
+                    <ul>
+                        <li><img src="__PUBLIC__/Home/images/coin_rmb.png" alt="" />　{:L('finance.renminbi')}(CNY)</li>
+                        <li>{:L('finance.keyong')}：<span class="green" id="cny_balance">{$cny['ky']|NumToStr}</span></li>
+                        <li>{:L('finance.dongjie')}：<span class="orange" id="cny_lock">{$cny['dj']|NumToStr}</span></li>
+                        <li style="width: 250px;">{:L('finance.zongzichan')}：<b id="cny_total">{$cny['zj']|NumToStr}</b></li>
+                       
+                    </ul>
+                </div>
+                <div class="coin_list_top">
+                    <ul>
+                        <li class="" style="width: 180px;">{:L('finance.bizhong')}</li>
+                        <li class="" style="width: 150px;">{:L('finance.keyongyue')}</li>
+                        <li class="" style="width: 150px;">{:L('finance.dongjieweituo')}</li>
+                        <li class="" style="width: 150px;">{:L('finance.zongji')}</li>
+                        <li class="" style="width: 150px;">{:L('finance.zhehe')} ($)</li>
+                        <li class="" style="width: 60px;">{:L('finance.caozuo')}</li>
+                    </ul>
+                </div>
+            </div>
+			<ul class="coin_list" id="grid-finance">
+			
+			<volist name="coinList" id="vo">
+					<li><dl>
+                     	<dt class="" style="width: 180px;height: 70px;">
+       <div class="coin_pic" style="width: 40px;">
+                     	<img src="__UPLOAD__/coin/{$vo['img']}" alt="" width="40" style="padding-top: 10px;" />
+       </div>
+                     	 <div class="coin_name">
+        <div>{$vo['title']}</div>
+        <p class="orange">{$vo['jia']|NumToStr}</p>
+       </div>
+      </dt>
+                       
+                       <dd class="" style="width: 150px;">{$vo['xnb']|NumToStr}</dd>
+                       <dd class="" style="width: 150px;">{$vo['xnbd']|NumToStr}</dd>
+                       <dd class="" style="width: 150px;">{$vo['xnbz']|NumToStr}</dd>
+                       <dd class="" style="width: 150px;">{$vo['zhehe']|NumToStr}</dd>
+                       <dd class="" style="width: 60px;">
+       <input type="button" value="{:L('finance.qujiaoyi')}"  onclick="top.location='/trade/index/market/{$vo.name}_cny'"  />
+      </dd>
+                       </dl></li>
+                        
+              </volist>          
+			
+			</ul>
+		</div>
+	</div>
+</div>
+
+	<br>
+<br>
+<style>
+.absolute {
+	position: absolute;
+}
+
+.fixed {
+	position: fixed;
+}
+</style>
+<script type="text/javascript">
+	//隔行变色
+	function change_bg(id) {
+		var oCoin_list = $('#' + id);
+		var oC_li = oCoin_list.find('li');
+		var oInp = oCoin_list.find('input');
+		for (var i = 0; i < oC_li.length; i++) {
+			oC_li.eq(i).css('background-color', i % 2 ? '#fff' : '#f8f8f8');
+			oInp.mouseover(function() {
+				this.style.color = '#fff';
+				this.style.backgroundColor = '#e55600'
+			});
+			oInp.mouseout(function() {
+				this.style.color = '#e55600';
+				this.style.background = 'none'
+			});
+		}
+	}
+	function change_bg_1(id, tag, col1, col2) {
+		var oCoin_list = $('#' + id);
+		var oC_li = oCoin_list.find(tag);
+		for (var i = 0; i < oC_li.length; i++)
+			oC_li.eq(i).css('background-color', i % 2 ? col1 : col2);
+	}
+	//移入行变色
+	function change_line_bg(id, tag, nobg) {
+		var oCoin_list = $('#' + id);
+		var oC_li = oCoin_list.find(tag);
+		var oInp = oCoin_list.find('input');
+		var oldCol = null;
+		var newCol = null;
+		if (!nobg) {
+			for (var i = 0; i < oC_li.length; i++) {
+				oC_li.eq(i).css('background-color', i % 2 ? '#fff' : '#f8f8f8');
+				oInp.mouseover(function() {
+					this.style.color = '#fff';
+					this.style.backgroundColor = '#e55600';
+				});
+				oInp.mouseout(function() {
+					this.style.color = '#e55600';
+					this.style.background = 'none';
+				});
+			}
+		}
+		oCoin_list.find(tag).hover(function() {
+			oldCol = $(this).css('backgroundColor');
+			$(this).css('background-color', '#f9f2dd');
+		}, function() {
+			$(this).css('background-color', oldCol);
+		})
+	}
+
+	change_line_bg('grid-finance', 'li');
+	var rollSet = $('#widget');
+	var offset = rollSet.offset();
+	var fwidth = $("#footer").height();
+	$(window).scroll(
+			function() {
+				var scrollTop = $(window).scrollTop();
+				var scrollBtm = $(document).height() - $(window).scrollTop()
+						- $("#widget").height();
+				if (offset.top < scrollTop) {
+					if (scrollBtm > fwidth) {
+						rollSet.removeClass('absolute').addClass('fixed')
+					} else {
+						rollSet.removeClass('fixed').addClass('absolute')
+					}
+				} else {
+					rollSet.removeClass('fixed')
+				}
+			})
+</script>
+
+<script>
+$("title").html("{:C('web_title')} - {:L('finance.caiwuzhongxin')}"); 
+	//菜单高亮
+	$('#finance_box').addClass('active');
+	$('#finance_index').addClass('active');
+	$('#finance_index i').attr('class', 'coin_menu_op_0');
+</script>
+<include file="Public:footer" />

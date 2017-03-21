@@ -1,0 +1,232 @@
+<include file="Public:header"/>
+<script type="text/javascript" src="__PUBLIC__/Home/js/jquery.qrcode.min.js"></script>
+<style>
+    .assets-mask {
+        opacity: 0;
+        visibility: hidden;
+        transition: all .5s cubic-bezier(0.2, 0.3, 0, 1);;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, .8);
+        top: 0;
+        z-index: 200;
+    }
+    .assets-dialog {
+        -webkit-transform: scale(.1);
+        -moz-transform: scale(.1);
+        transform: scale(.1);
+        transition: all .6s cubic-bezier(0.2, 0.3, 0, 1);
+        padding: 20px;
+        width: 83%;
+        margin: 200px auto 0 auto;
+        background-color: #fff;
+        border-radius: 2px;
+        border: 1px solid #eee;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, .18)
+    }
+    .assets-mask.open {
+        visibility: visible;
+        opacity: 1;
+    }
+    .assets-mask.open .assets-dialog {
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        transform: scale(1);
+    }
+    .gooc-button {
+        width: 301px;
+        height: 43px;
+        line-height: 43px;
+    }
+    #daoshu {
+        color: #fff;
+    }
+    .gooc-button[disabled] {
+        background-color: #ccc;
+    }
+</style>
+<div class="autobox">
+    <div class="now">
+        <a href="/" class="orange">{:L('finance.shouye')}</a> &gt;
+        <a href="/finance/" class="orange">{:L('finance.caiwuzhongxin')}</a> &gt; {:L('finance.zhuanruxunibi')}
+    </div>
+    <div class="assets_center clear po_re zin70">
+        <!--左侧菜单-->
+        <include file="Finance:left"/>
+        <!--右侧内容-->
+        <div class="assets_content w900 right bg_w" style="position: relative;">
+            <div class="safe_center clear" style="padding-left: 0px; border-bottom: 2px solid #e55600;">
+                <h1 style="margin-top: 0px; margin-bottom: 15px; line-height: 15px;">{:L('finance.zhuanruxunibi')}</h1>
+            </div>
+            <div class="sj" style="top: 40px; left: 72px;"></div>
+            <notempty name="prompt_text">
+                <div class="mytips">
+                    <h6 style="color: #ff8000;">{:L('finance.wenxintishi')}</h6>
+                    {$prompt_text}
+                </div>
+            </notempty>
+            <br>
+
+            <div class="weituo_bizhong">
+                <div class="bizhong_select">
+                    <div class="bz_btn">
+                        <img src="__UPLOAD__/coin/{$coin_list[$xnb]['img']}" alt="" style=" width: 22px;float: left;
+margin-top: 7px;
+margin-right: 5px;"/><span id="coin-default">
+
+<select name="type" id="qianbao_type">
+    <volist name="coin_list" id="vo">
+        <eq name="xnb" value="$key">
+            <option value="{$vo['name']}" selected="selected">{$vo.title} ({$vo['name']|strtoupper})</option>
+            <else/>
+            <option value="{$vo['name']}">{$vo.title} ({$vo['name']|strtoupper})</option>
+        </eq>
+    </volist>
+</select>
+</span>
+                    </div>
+                </div>
+                <div class="bizhong_type" style="width: 220px;">
+                    <span>{:L('finance.keyong')}<em class="coin-name"></em>：<font class="coin-balance">{$user_coin[$xnb]|Num}</font></span>
+
+                </div>
+            </div>
+            <br>
+            <eq name="zr_jz" value="1">
+                <div class="cnyin_record">
+                    <div class="adr-zhuanru" style="position: relative;z-index:0;">
+                        <div id="pt-qrcode" style="position:absolute;top:0;right:0;display: inline-block;;">
+                            <div id="qrcode-wallet" style="display: inline-block;">
+                                <saon id="codeaa"></saon>
+                            </div>
+                            <p id="qrcode-t" style="font-size:13px;text-align: center;">{$coin_list[$xnb]['title']}{:L('finance.qianbaodizhi')}</p>
+                        </div>
+                        <div class="qb_tishi">{:L('finance.qianbaodizhi')}
+                            <b class="coin-name">{$coin_list[$xnb]['title']}</b> {:L('finance.zhuanrucidizhi')}：
+                            <notempty name="coin_list[$xnb]['zr_zs']">
+                                <span id="zengsong" style="color: red; font-size: 14px;">{:L('finance.zhuanrujizeng')}{$coin_list[$xnb]['zr_zs']}%</span>
+                            </notempty>
+                        </div>
+                        <div class="qb_dizhi ts">
+                            <p id="wallet">{$qianbao}</p>
+                        </div>
+                    </div>
+                    <dl id="other_txxz" class="txxz">
+                        <dd>{:L('finance.zhuanrushuoming')}：</dd>
+                        <dd class="sm_1">1.
+                            <span id="txxz_1">{:L('finance.zidongzhuanru')}</span>，
+                            <b class="coin-name">{$coin_list[$xnb]['title']}</b> {:L('finance.zhuanzhangxuyao')}
+                            <b class="coin-name">{$coin_list[$xnb]['title']}</b> {:L('finance.wangluoqueren')}
+                            <b id="confirmNum">{$coin_list[$xnb]['zr_dz']}</b> {:L('finance.gequerenhouninde')}
+                            <b class="coin-name">{$coin_list[$xnb]['title']}</b> {:L('finance.zidongchongzhi')}
+                        </dd>
+                        <dd class="sm_2">2. {:L('finance.zhuanrudizhi')}<span class="kuangchi-buyao">， {:L('finance.fukuandizhi')}</span>
+                        </dd>
+                    </dl>
+                    <br>
+                </div>
+                <else/>
+                <div class="cnyin_record">
+                    <div class="adr-zhuanru" style="position: relative;z-index:0;">
+                        <div class="qb_dizhi ts">
+                            <p id="wallet">{$qianbao}</p>
+                        </div>
+                    </div>
+                </div>
+            </eq>
+            <div class="cnyin_record">
+                <div class="f_body">
+                    <table class="f_table" id="investLog_content">
+                        <thead>
+                        <tr>
+                            <th width="">{:L('finance.zhuanrushijian')}</th>
+                            <th width="">{:L('finance.zhuanrubizhong')}</th>
+                            <th width="">{:L('finance.zhuanchudizhi')}</th>
+                            <th width="">{:L('finance.zhuanrushuliang')}</th>
+                            <th width="">{:L('finance.zhuanruzengsong')}</th>
+                            <th width="">{:L('finance.daozhangshuliang')}</th>
+                            <th width="">{:L('finance.zhuangtai')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="list" id="vo">
+                            <tr>
+                                <td>{$vo.addtime|addtime}</td>
+                                <td>{$vo.coinname}</td>
+                                <td>{$vo.username}</td>
+                                <td>{$vo['num']|NumToStr}</td>
+                                <td>{$vo['fee']|NumToStr}</td>
+                                <td>{$vo['mum']|NumToStr}</td>
+                                <td>
+                                    <eq name="vo.status" value="1">
+                                        <font color="#23a800">{:L('finance.zhuanruchenggong')} </font>
+                                        <else/>
+                                        <font color="red">等待处理,还需要 {$vo.status|abs} {:L('finance.confirm')}</font>
+                                    </eq>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                    <div class="pages">{$page}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<script type="text/javascript" src="__PUBLIC__/Home/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript">
+    $('#codeaa').qrcode({
+        render: "table", //table方式
+        width: 100, //宽度
+        height: 100, //高度
+        text: "{$qianbao}" //任意内容
+    }); //任意字符串
+</script>
+<script>
+    $("#qianbao_type").change(function () {
+        var coin = $("#qianbao_type option:selected").val();
+        window.location = '/Finance/myzr/coin/' + coin + '.html';
+    });
+</script>
+<script>
+    $('#btn-submit').click(function () {
+        var mbTest_num = /^([1-9]{1}\d*)(\.(\d){1,2})?$/;
+        var mbTest_remark = /^(\w|[\u4E00-\u9FA5])*$/;
+        var type = $('#mycz_type option:selected').val();
+        var num = $("#mycz_amount").val();
+        if (type == "" || type == null) {
+            layer.tips('请选择{:L('finance.chongzhifangshi')}', '#mycz_type', {tips: 3});
+            return false;
+        }
+        if (num == "" || num == null) {
+            layer.tips('请输入{:L('finance.chongzhijine')}', '#mycz_amount', {tips: 3});
+            return false;
+        }
+        if (!mbTest_num.test(num)) {
+            layer.tips('{:L('finance.chongzhijine')}格式错误 ({:L('finance.renminbi')}格式)', '#mycz_amount', {tips: 3});
+            return false;
+        }
+        $.post("{:U('Mycz/index')}", {
+            type: type,
+            num: num
+        }, function (data) {
+            if (data.status == 1) {
+                layer.msg(data.info, {icon: 1});
+                window.setTimeout("window.location='{:U('Mycz/log')}'", 3000);
+            } else {
+                layer.msg(data.info, {icon: 2});
+            }
+        }, "json");
+    });
+</script>
+<script>
+    //菜单高亮
+    $('#finance_box').addClass('active');
+    $('#finance_myzr').addClass('active');
+    $('#finance_myzr i').attr('class', 'coin_menu_op_4');
+</script>
+<include file="Public:footer"/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
