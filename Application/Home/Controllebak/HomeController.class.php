@@ -15,8 +15,7 @@ class HomeController extends \Think\Controller
 		} */
 
 		if (!session('userId')) {
-			//session('userId', 0);
-			session('userId',4);
+			session('userId', 0);
 		}
 		else if (CONTROLLER_NAME != 'Login') {
 			$user = D('user')->where('id = ' . session('userId'))->find();
@@ -28,7 +27,6 @@ class HomeController extends \Think\Controller
 			if (!$user['truename']) {
 				redirect('/Login/register3');
 			}
-
 		}
 
 		if (userid()) {
@@ -71,8 +69,6 @@ class HomeController extends \Think\Controller
 		}
 
 		$coinList = array();
-        
-
 
 		foreach ($coin as $k => $v) {
 			$coinList['coin'][$v['name']] = $v;
@@ -105,7 +101,6 @@ class HomeController extends \Think\Controller
 			S('home_market', $market);
 		}
 
-      
 		foreach ($market as $k => $v) {
 			$v['new_price'] = round($v['new_price'], $v['round']);
 			$v['buy_price'] = round($v['buy_price'], $v['round']);
@@ -131,8 +126,6 @@ class HomeController extends \Think\Controller
 
 		$this->assign('C', $C);
 		$this->kefu = './Application/Home/View/Kefu/' . $C['kefu'] . '/index.html';
-         
-
 
 		if (!S('daohang_aa')) {
 			$tables = M()->query('show tables');
@@ -149,7 +142,6 @@ class HomeController extends \Think\Controller
 			S('daohang_aa', 1);
 		}
 
-        /*
 		if (!S('daohang') || APP_DEBUG) {
 			$this->daohang = M('Daohang')->where(array('status' => 1))->order('sort asc')->select();
 			S('daohang', $this->daohang);
@@ -157,9 +149,8 @@ class HomeController extends \Think\Controller
 		else {
 			$this->daohang = S('daohang');
 		}
-		*/
 
-        /*
+  
 		$footerArticleType = (APP_DEBUG ? null : S('footer_indexArticleType'));
 
 		if (!$footerArticleType) {
@@ -172,14 +163,13 @@ class HomeController extends \Think\Controller
 
 		if (!$footerArticle) {
 			foreach ($footerArticleType as $k => $v) {
-				$footerArticle[$v['name']] = M('ArticleType')->where(array('type' => $v['name'], 'footer' => 1, 'status' => 1))->order('id asc')->limit(4)->select();
+				//$footerArticle[$v['name']] = M('ArticleType')->where(array('shang' => $v['name'], 'footer' => 1, 'status' => 1))->order('id asc')->limit(4)->select();
+				$footerArticle[$v['name']] = M('Article')->field(array('id','title'))->where(array('type' => $v['name'], 'footer' => 1, 'status' => 1))->order('id asc')->limit(4)->select();
 			}
-
 			S('footer_indexArticle', $footerArticle);
 		}
 
 		$this->assign('footerArticle', $footerArticle);
-		*/
 	}
 }
 

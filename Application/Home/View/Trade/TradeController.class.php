@@ -7,7 +7,6 @@ class TradeController extends HomeController
 	public function index($market = NULL)
 	{
 		if (!userid()) {
-			echo ''please login;
 		}
 
 		check_server();

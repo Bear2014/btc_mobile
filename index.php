@@ -17,7 +17,7 @@
     // 定义数据库地址
     define('DB_HOST', '127.0.0.1');
     // 定义数据库名
-    define('DB_NAME', 'base');
+    define('DB_NAME', 'btc_mobile');
     // 定义数据库账号
     define('DB_USER', 'root');
     // 定义数据库密码

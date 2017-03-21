@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>七剑客钱包</title>
+<link href="__CSS__/style.css" rel="stylesheet" type="text/css" media="all"/>
+<script type="text/javascript" src="/Public/Home/js/jquery.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="keywords" content="七剑客科技,钱包,手机钱包,比特币,虚拟币,虚拟币钱包,虚拟币手机钱包" />
+<link href='http://fonts.googleapis.com/css?family=Signika:400,300,600,700' rel='stylesheet' type='text/css'>
+
+<style type="text/css">
+    .functionBtn{
+    	    /*background: #C50000;*/
+            background:#da7c7c;
+		    font-size: 1em;
+		    font-weight: 400;
+		    font-family: 'Signika', sans-serif;
+		    color: #fff;
+		    padding: 0.4em 0.5em 0.5em 0.5em;
+		    width: 38%;
+		    text-align: center;
+		    border-radius: 4px 4px 4px 4px;
+		    margin-top:5px;
+    }
+    
+    img{
+	    	margin-left:2%;
+	    	width:35px;
+	    	float:left;
+	    	border:none;
+	    	border-radius:4px;
+    } 
+
+    select{
+    	    margin-top:5px;
+    	    margin-left:3%;
+    	    height:25px;
+    	    float:left;
+            color:#878787;
+    }
+
+    .num{
+    	    margin-top:6px;
+    	    margin-left:5px;
+    	    float:left;
+    	    color:#878787;
+    }
+
+    .numTxt{
+    	   float:left;
+    }
+
+    .numNum{
+    	    margin-top:2px;
+    	    margin-left:5px;
+    	    float:left;
+    	    color:#C50000;
+    }
+
+    .fontstyle,option{
+    	    font-size: 0.7em;
+    		font-weight: 600;
+    		color: #878787;
+    }
+
+</style>
+
+</head>
+<body>
+<h1>七剑客手机钱包</h1>
+
+<div class="subscribe">
+   
+   <!--自定义的按钮功能-->
+    <div class="sub-box1" style="height:37px;padding-top:12px">
+   	    <a href="/Mobile/Finance/myzc.html" class="functionBtn" style="margin-left:1%;" id="myzc">转出虚拟币</a>
+        <a href="/Mobile/Finance/myzr.html" class="functionBtn" id="myzr">转入虚拟币</a>
+        <a href="/Mobile/Finance/login.html" class="functionBtn" style="margin-left:17%;" id="login">登录</a>
+    </div>
+
+    <div class="subscribe">
+		<div class="sub-box1 send">
+			<h3>转出虚拟币</h3>
+
+            <div class="sub-box1" style="border:1px solid #e2e0e0;height:35px;width:96%;margin:1em auto;">
+                <img src="__UPLOAD__/coin/{$coin_list[$xnb]['img']}" />
+
+                <!--
+                <select style="border:none;border-radius:4px;outline:none;-webkit-appearance: none;box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.41);">
+                	<option value="btc">比特币(BTC)</option>
+                	<option value="ltc">莱特币(LTC)</option>
+                	<option value="avc">奥维币(AVC)</option>
+                	<option value="avc">奥维币奥维币(AVC)</option>
+                </select>
+                -->
+
+                <select  name="type" id="qianbao_type" style="border:none;border-radius:4px;outline:none;-webkit-appearance: none;box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.41);">
+                    <volist name="coin_list" id="vo">
+                    <eq name="xnb" value="$key">
+                        <option value="{$vo['name']}" selected="selected">{$vo.title} ({$vo['name']|strtoupper})</option>
+                    <else/>
+                        <option value="{$vo['name']}">{$vo.title} ({$vo['name']|strtoupper})</option>
+                    </eq>
+                    </volist>
+                </select>
+
+                <div class="num">
+                    <div class="numTxt">可用:</div>
+                 	<div class="numNum">{$user_coin[$xnb]|Num}</div>
+                </div>
+            </div>
+
+			<div class="news" style="">
+
+			  	<div class="fontstyle" style="height:15px;">
+                    <div style="float:left;">这里是您的钱包地址，请将您的</div>
+                    <div style="float:left;color:red;">{$coin_list[$xnb]['title']}</div>
+                    <div style="float:left;">转入此地址:</div>
+                </div>
+
+                <div class="sub-box1 send" style="width:98%;height:40px;line-height:40px;text-align:center;vertical-align:middle;margin-top:20px;">
+                    {$qianbao}
+                </div>
+
+                <div class="fontstyle" style="height:auto;">
+                    <div>转入说明：</div>
+                    <div>
+
+                        (1). 转入是自动的，
+                        <span>{$coin_list[$xnb]['title']}</span>
+                        转账需要整个
+                        <span>{$coin_list[$xnb]['title']}</span>
+                        网络进行确认，达到1个确认后您的
+                        <span>{$coin_list[$xnb]['title']}</span>
+                        会自动充值到您的账户中 </br>
+
+                        (2). 此地址是您唯一且独自使用的转入地址，您可以同时进行多次充值，也可将此地址做为您在矿池的付款地址 
+                    </div>
+                </div>
+                
+               
+
+		    </div>
+
+	  
+		</div>
+    </div>
+
+
+</div>
+
+
+<div class="copyright">
+	<p>CopyRight by<a href="http://www.qijianke.com/" target="_blank"> 七剑客科技 </a></p>
+</div>	
+
+<script>
+     
+    //菜单高亮
+    var myzr = document.getElementById('myzr');
+    myzr.style.background= '#C50000';
+
+    //下拉列表事件
+    $("#qianbao_type").change(function () {
+        var coin = $("#qianbao_type option:selected").val();
+        window.location = '/Mobile/Finance/myzr/coin/' + coin + '.html';
+    });
+
+</script>
+
+</body>
+</html>
