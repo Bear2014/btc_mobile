@@ -2,17 +2,13 @@
 //dezend by http://www.yunlu99.com/ QQ:270656184
 namespace Home\Controller;
 
-class IndexController extends HomeController
+class FinanceController extends HomeController
 {
-
 	public function index()
 	{
-        
 		if (!userid()) {
 			redirect('/#login');
-			//redirect('/Login/register.html');
 		}
-
 
 		$CoinList = M('Coin')->where(array('status' => 1))->select();
 		$UserCoin = M('UserCoin')->where(array('userid' => userid()))->find();
@@ -519,7 +515,7 @@ class IndexController extends HomeController
 			redirect('/#login');
 		}
 
-		//$this->assign('prompt_text', D('Text')->get_content('finance_myzc'));
+		$this->assign('prompt_text', D('Text')->get_content('finance_myzc'));
 
 		if (C('coin')[$coin]) {
 			$coin = trim($coin);
@@ -549,7 +545,6 @@ class IndexController extends HomeController
 		else {
 			$userQianbaoList = M('UserQianbao')->where(array('userid' => userid(), 'status' => 1, 'coinname' => $coin))->order('id desc')->select();
 			$this->assign('userQianbaoList', $userQianbaoList);
-			/*
 			$moble = M('User')->where(array('id' => userid()))->getField('moble');
 
 			if ($moble) {
@@ -561,10 +556,8 @@ class IndexController extends HomeController
 			}
 
 			$this->assign('moble', $moble);
-			*/
 		}
-        
-        /*
+
 		$where['userid'] = userid();
 		$where['coinname'] = $coin;
 		$Moble = M('Myzc');
@@ -574,7 +567,6 @@ class IndexController extends HomeController
 		$list = $Moble->where($where)->order('id desc')->limit($Page->firstRow . ',' . $Page->listRows)->select();
 		$this->assign('list', $list);
 		$this->assign('page', $show);
-		*/
 		$this->display();
 	}
 
@@ -1638,110 +1630,6 @@ class IndexController extends HomeController
 			}
 		}
 	}
-
-  
-    //登录
-    public function login(){
-    	$this->display();
-    }
-
-
-    //登录处理
-    public function submit($username, $password, $verify = NULL)
-	{
-		if (C('login_verify')) {
-			if (!check_verify(strtoupper($verify))) {
-				$this->error('图形验证码错误!');
-			}
-		}
-
-		if (check($username, 'email')) {
-			$user = M('User')->where(array('email' => $username))->find();
-			$remark = '通过邮箱登录';
-		}
-
-		if (!$user && check($username, 'moble')) {
-			$user = M('User')->where(array('moble' => $username))->find();
-			$remark = '通过手机号登录';
-		}
-
-		if (!$user) {
-			$user = M('User')->where(array('username' => $username))->find();
-			$remark = '通过用户名登录';
-		}
-
-		if (!$user) {
-			$this->error('用户不存在！');
-		}
-
-		if (!check($password, 'password')) {
-			$this->error('登录密码格式错误！');
-		}
-
-		if (md5($password) != $user['password']) {
-			$this->error('登录密码错误！');
-		}
-
-		if ($user['status'] != 1) {
-			$this->error('你的账号已冻结请联系管理员！');
-		}
-
-		$mo = M();
-		$mo->execute('set autocommit=0');
-		$mo->execute('lock tables movesay_user write , movesay_user_log write ');
-		$rs = array();
-		$rs[] = $mo->table('movesay_user')->where(array('id' => $user['id']))->setInc('logins', 1);
-		$rs[] = $mo->table('movesay_user_log')->add(array('userid' => $user['id'], 'type' => '登录', 'remark' => $remark, 'addtime' => time(), 'addip' => get_client_ip(), 'addr' => get_city_ip(), 'status' => 1, 'sort' => 0, 'endtime' => 0));
-
-		if (check_arr($rs)) {
-			$mo->execute('commit');
-			$mo->execute('unlock tables');
-
-			if (!$user['invit']) {
-				for (; ; ) {
-					$tradeno = tradenoa();
-
-					if (!M('User')->where(array('invit' => $tradeno))->find()) {
-						break;
-					}
-				}
-
-				M('User')->where(array('id' => $user['id']))->setField('invit', $tradeno);
-			}
-
-			session('userId', $user['id']);
-			session('userName', $user['username']);
-
-			if (!$user['paypassword']) {
-				session('regpaypassword', $rs[0]);
-				session('reguserId', $user['id']);
-			}
-
-			if (!$user['truename']) {
-				session('regtruename', $rs[0]);
-				session('reguserId', $user['id']);
-			}
-
-		    $this->success('登录成功！');
-			
-		}
-		else {
-			$mo->execute('rollback');
-			$this->error('登录失败！');
-		}
-	}
-
-
-	//登出
-	public function loginout()
-	{
-		session(null);
-		redirect('/Mobile/Finance/login');
-	}
-
-
-
-
 }
 
 ?>

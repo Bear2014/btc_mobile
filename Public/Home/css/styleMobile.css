@@ -82,7 +82,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 .news input.name[type="text"] {
   margin-right: 0%;
 }
-.news input[type="text"] {
+.news input[type="text"]{
   font-size: 0.7em;
   font-weight: 600;
   color: #878787;

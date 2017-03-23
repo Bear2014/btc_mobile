@@ -1,0 +1,108 @@
+<include file="Public:header" />
+
+    <div class="subscribe">
+		<div class="sub-box1 send">
+			<h3>注册--用户名注册</h3>
+			<div class="news">
+			  	<form>
+ 
+                    <input type="text" class="email" id="username" name="username" placeholder="用户名" onfocus="this.value = '';" >
+
+                    <div>
+                    	<input type="text" class="username" id="verify" name="verify"  placeholder="验证码" onfocus="this.value = '';" style="float:left;">
+                       
+                        <img class="codeImg" src="{:U('Verify/code')}" title="换一张" onclick="this.src=this.src+'?t='+Math.random()" />
+                    </div>
+
+                    <input type="password"  class="email inputPassword" id="password" name="password" placeholder="登录密码" onfocus="this.value = '';">
+                    
+                    <input type="password" class="email inputPassword" id="repassword" name="repassword" placeholder="重复登录密码" onfocus="this.value = '';">
+                    
+			  		<input type="text" class="email" id="invite" name="invite" placeholder="邀请码(非必填)"  onfocus="this.value = '';">
+
+                    <span style="font-size:12px;color:#878787;">注册即视为同意协议</span>
+                    
+			  	</form>
+		    </div>
+
+	       	<input type="submit" value="登录" onclick="Update();" />
+		</div>
+    </div>
+
+<include file="Public:footer" />
+
+
+<style type="text/css">
+	.codeImg{
+		float:left;
+		/*margin-left:13%;*/
+		margin-left:5%;
+		height:35px;
+	}
+</style>
+
+
+<script type="text/javascript">
+
+//导航高亮
+var myzr = document.getElementById('myregister');
+myzr.style.background= '#C50000';
+
+
+    //注册处理
+	function Update(){
+		var username=$("#username").val();
+		var password=$("#password").val();
+		var repassword=$("#repassword").val();
+		var invit=$("#invite").val();
+		var verify=$("#verify").val();
+		if(username==""||username==null){
+			//formMsg('username', 0, '请输入用户名');
+			return false;
+		}
+		if(password==""||password==null){
+			formMsg('password', 0, '请输入密码');
+			//formMsg('password', 0, 'pleas enter {:L('login.denglumima')}');
+			return false;
+		}
+		if(repassword==""||repassword==null){
+			formMsg('repassword', 0, '请输入确认密码');
+			//formMsg('repassword', 0, 'please enter the repeat password');
+			return false;
+		}
+		if(password!=repassword){
+			formMsg('repassword', 0, '确认密码错误');
+			//formMsg('repassword', 0, 'repeat password error');
+			return false;
+		}
+		
+		if(verify==""||verify==null){
+			//formMsg('verify', 0, '请输入验证码');
+			return false;
+		}
+
+        console.log(username+'--');
+        console.log(password+'--');
+        console.log(repassword+'--');
+        console.log(invit+'--');
+        console.log(verify+'--');
+
+		$.post("{:U('/Home/Login/upregister')}",{username:username,password:password,repassword:repassword,invit:invit,verify:verify},function(data){
+			if(data.status==1){
+				layer.msg(data.info,{icon:1});
+				$.cookies.set('cookie_username',username);
+				window.location='/Home/Login/register2';
+			}else{
+				layer.msg(data.info,{icon:2});
+				if(data.url){
+					window.location=data.url;
+				}
+			}
+		},"json");
+
+	}
+
+</script>
+
+</body>
+</html>

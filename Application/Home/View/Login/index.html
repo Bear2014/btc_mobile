@@ -1,0 +1,66 @@
+<include file="Public:header" />
+
+    <div class="subscribe">
+		<div class="sub-box1 send">
+			<h3>登录</h3>
+			<div class="news">
+			  	<form>
+ 
+                    <input type="text" class="email" id="login_username" placeholder="用户名" onfocus="this.value = '';" >
+			  		<input type="password" class="email inputPassword" id="login_password"  placeholder="密码" onfocus="this.value = '';">
+
+			  	</form>
+		    </div>
+
+	       	<input type="submit" value="登录" onclick="upLogin();" />
+		</div>
+    </div>
+
+
+<include file="Public:footer" />
+
+
+<script>
+
+//导航高亮
+var myzr = document.getElementById('login');
+myzr.style.background= '#C50000';
+
+function upLogin() {
+
+		var username = $("#login_username").val();
+		var password = $("#login_password").val();
+		var verify = $("#login_verify").val();
+		if (username == "" || username == null) {
+			layer.tips('请输入用户名', '#login_username', {tips: 3});
+			return false;
+		}
+		if (password == "" || password == null) {
+			layer.tips('请输入登录密码', '#login_password', {tips: 3});
+			return false;
+		}
+
+		$.post("/Home/Login/submit.html", {
+			username: username,
+			password: password,
+			verify: verify,
+		}, function (data) {
+			if (data.status == 1) {
+				$.cookies.set('cookie_username', username);
+				layer.msg(data.info, {icon: 1});
+				window.location = '/Home/Finance/index';
+			} else {
+				//刷新验证码
+				$(".reloadverifyindex").click();
+				layer.msg(data.info, {icon: 2});
+				if (data.url) {
+					window.location = data.url;
+				}
+			}
+		}, "json");
+	}
+
+</script>
+
+</body>
+</html>

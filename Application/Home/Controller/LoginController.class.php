@@ -1,14 +1,8 @@
 <?php
-//dezend by http://www.yunlu99.com/ QQ:270656184
 namespace Home\Controller;
 
 class LoginController extends HomeController
 {
-
-    public function index(){
-    	echo 'this is login index!';die;
-    	$this->display();
-    }
 
 	public function register()
 	{
@@ -16,7 +10,8 @@ class LoginController extends HomeController
 	}
 
 	public function upregister($username, $password, $repassword, $verify, $invit)
-	{
+    {
+
 		if (!check_verify(strtoupper($verify))) {
 			$this->error('图形验证码错误!');
 		}
@@ -90,6 +85,7 @@ class LoginController extends HomeController
 			$mo->execute('rollback');
 			$this->error('注册失败！');
 		}
+
 	}
 
 	public function register2()

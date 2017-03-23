@@ -15,8 +15,7 @@ class HomeController extends \Think\Controller
 		} */
 
 		if (!session('userId')) {
-			//session('userId', 0);
-			session('userId',4);
+			session('userId', 0);
 		}
 		else if (CONTROLLER_NAME != 'Login') {
 			$user = D('user')->where('id = ' . session('userId'))->find();

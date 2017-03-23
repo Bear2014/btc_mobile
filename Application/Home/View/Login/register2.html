@@ -1,0 +1,60 @@
+<include file="Public:header" />
+
+    <div class="subscribe">
+		<div class="sub-box1 send">
+			<h3>注册--用户名注册</h3>
+			<div class="news">
+			  	<form>
+                    <input type="password"  class="email inputPassword" id="paypassword" name="paypassword" placeholder="交易密码" onfocus="this.value = '';">
+                    <input type="password" class="email inputPassword" id="repaypassword" name="repaypassword" placeholder="重复交易密码" onfocus="this.value = '';">
+			  	</form>
+		    </div>
+
+	       	<input type="submit" value="登录" onclick="Update();" />
+		</div>
+    </div>
+
+<include file="Public:footer" />
+
+
+<script type="text/javascript">
+
+    //导航高亮
+    var myzr = document.getElementById('myregister');
+    myzr.style.background= '#C50000';
+
+    function Update(){
+        var paypassword=$("#paypassword").val();
+        var repaypassword=$("#repaypassword").val();
+
+        if(paypassword==""||paypassword==null){
+            //formMsg('paypassword', 0, '请输入交易密码');
+            return false;
+        }
+        if(repaypassword==""||repaypassword==null){
+            //formMsg('repaypassword', 0, '请输入确认密码');
+            return false;
+        }
+        if(paypassword!=repaypassword){
+            //formMsg('repassword', 0, '确认密码错误');
+            return false;
+        }
+
+        $.post("{:U('/Home/Login/upregister2')}",{paypassword:paypassword,repaypassword:repaypassword},function(data){
+            if(data.status==1){
+                layer.msg(data.info,{icon:1});
+                window.location='/Home/Login/register3';
+            }else{
+                layer.msg(data.info,{icon:2});
+                if(data.url){
+                    window.location=data.url;
+                }
+            }
+        },"json");
+        
+    }
+</script>
+
+
+</body>
+</html>
