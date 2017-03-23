@@ -2,13 +2,19 @@
 
     <div class="subscribe">
 		<div class="sub-box1 send">
-			<h3>注册--用户名注册</h3>
+			<h3>注册--实名认证</h3>
 			<div class="news">
 			  	<form>
-                    <input type="email"  class="email inputPassword" id="regtruename" name="regtruename" placeholder="交易密码" onfocus="this.value = '';">
+                    <input type="text"  class="email inputPassword" id="regtruename" name="regtruename" placeholder="真实姓名" onfocus="this.value = '';">
 
+                    <select id="regidcardtype" style="height:35px;width:25%;border:none;border-radius:4px;outline:none;-webkit-appearance: none;box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.41);">
+						<option style="color:#878787;">证件类型</option>
+                     	<option style="color:#878787;" value="1" selected>身份证</option>
+                     	<option style="color:#878787;" value="2">护  照</option>
+                    </select>
 
-                    <input type="email" class="email inputPassword" id="regidcard" name="regidcard" placeholder="重复交易密码" onfocus="this.value = '';">
+                    <input type="text" class="username inputPassword" style="width:65%;" id="regidcard" name="regidcard" placeholder="证件号码" onfocus="this.value = '';">
+
 			  	</form>
 		    </div>
 
@@ -25,7 +31,7 @@
     var myzr = document.getElementById('myregister');
     myzr.style.background= '#C50000';
 
-
+     
 
 </script>
 
