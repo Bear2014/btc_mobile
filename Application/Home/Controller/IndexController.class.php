@@ -9,10 +9,12 @@ class IndexController extends HomeController
 	{
         
 		if (!userid()) {
-			redirect('/#login');
-			//redirect('/Login/register.html');
+			redirect('/Home/Login/index.html');
+		}else{
+			redirect('/Home/Finance/index.html');
 		}
 
+		exit;
 
 		$CoinList = M('Coin')->where(array('status' => 1))->select();
 		$UserCoin = M('UserCoin')->where(array('userid' => userid()))->find();

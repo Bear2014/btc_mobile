@@ -1,0 +1,70 @@
+<include file="Public:header" />
+
+
+	<div class="subscribe">
+		<div class="sub-box1 send">
+			<h3>手机绑定</h3>
+
+
+            <!--显示绑定绑定界面开始-->
+				    <input type="text" class="email" id="username" name="username" placeholder="用户名" onfocus="this.value = '';" >
+
+                    <div>
+                    	<input type="text" class="username" id="verify" name="verify"  placeholder="验证码" onfocus="this.value = '';" style="float:left;">
+                       
+                        <img class="codeImg" src="{:U('Verify/code')}" title="换一张" onclick="this.src=this.src+'?t='+Math.random()" />
+                    </div>
+
+                    <input type="password"  class="email inputPassword" id="password" name="password" placeholder="登录密码" onfocus="this.value = '';">
+                    
+                    <input type="password" class="email inputPassword" id="repassword" name="repassword" placeholder="重复登录密码" onfocus="this.value = '';">
+                    
+			  		<input type="text" class="email" id="invite" name="invite" placeholder="邀请码(非必填)"  onfocus="this.value = '';">
+
+                    <span style="font-size:12px;color:#878787;">注册即视为同意协议</span>
+
+            <!--显示绑定界面结束--->
+
+          
+
+
+			<!--显示绑定信息开始-->
+					<div class="news">
+					  	<form>
+		 
+		                    <div>
+		                    	<span>用户名: </span>
+		                    	<span>{$user.username}</span>
+		                    </div>
+
+		                    <div>
+		                    	<span>认证名: </span>
+		                    	<span>{$user.truename}</span>
+		                    </div>
+
+		                    <div>
+		                    	<span>证件号: </span>
+		                    	<span>{$user.idcard}</span>
+		                    </div>
+
+					  	</form>
+				    </div>
+            <!--显示绑定信息结束-->
+
+
+	       	<input type="submit" value="登录" onclick="upLogin();" />
+		</div>
+    </div>
+
+
+<include file="Public:footer" />
+
+<script type="text/javascript">
+
+</script>
+
+
+
+
+</body>
+</html>

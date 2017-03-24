@@ -124,8 +124,8 @@ class LoginController extends HomeController
 		$this->display();
 	}
 
-	//public function upregister3($truename, $idcardtype, $idcard)
-        public function upregister3($truename,$idcard)
+	public function upregister3($truename, $idcardtype, $idcard)
+    //public function upregister3($truename,$idcard)
 	{
 		if (!check($truename, 'require')) {
 			$this->error('真实姓名不能为空！'.$truename);
@@ -134,14 +134,13 @@ class LoginController extends HomeController
 		if ($idcardtype == 1 && !check($idcard, 'idcard')) {
 			$this->error('身份证号格式错误！');
 		}
-                /*
+              
 		if ($idcardtype == 2 && !check($idcard, 'passport')) {
 		    $this->error('护照号格式错误！');
 		}
-                */
 
 		if (!session('reguserId')) {
-			$this->error('非法访问！');
+			$this->error('非法访问xxxxx！');
 		}
 
 		if (M('User')->where(array('id' => session('reguserId')))->save(array('truename' => $truename, 'idcardtype' => $idcardtype, 'idcard' => $idcard))) {

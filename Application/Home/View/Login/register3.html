@@ -18,7 +18,7 @@
 			  	</form>
 		    </div>
 
-	       	<input type="submit" value="登录" onclick="Update();" />
+	       	<input type="submit" value="下一步" onclick="Update();" />
 		</div>
     </div>
 
@@ -31,8 +31,33 @@
     var myzr = document.getElementById('myregister');
     myzr.style.background= '#C50000';
 
+    //更新实名认证信息
     function Update(){
-    	
+    	var truename=$("#regtruename").val();
+		var idcardtype=$("#regidcardtype").val();
+		var idcard=$("#regidcard").val();
+
+		if(truename==null||truename==""){
+			//formMsg('truename', 0, '请输入真实姓名');
+			return false;
+		}
+		if(idcard==null||idcard==""){
+			//formMsg('idcard', 0, '请输入{:L('login.zhengjianhao')}');
+			return false;
+		}
+
+
+		$.post("{:U('/Home/Login/upregister3')}",{truename:truename,idcardtype:idcardtype,idcard:idcard},function(data){
+			if(data.status==1){
+				layer.msg(data.info,{icon:1});
+				window.location='/Home/Login/register4';
+			}else{
+				layer.msg(data.info,{icon:2});
+				if(data.url){
+					window.location=data.url;
+				}
+			}
+		},"json");
     }
     
 

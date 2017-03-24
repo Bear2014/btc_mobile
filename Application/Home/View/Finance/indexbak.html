@@ -6,17 +6,17 @@
         <div class="news" style="color:#878787;">
 
 	        <table>
-	            <thead>   <!--这里放人民币相关信息-->
-	            <!--
+	            <thead>
 		        	<tr>
 		        		<th>币种</th>
 		        		<th>可用额</th>
 		        		<th>冻结</th>
+		        		<!--
 		        		<th>总计</th>
 		        		<th>折合(￥)</th>
+		        		-->
 		        		<th>操作</th>
 		        	</tr>
-		        	-->
 	        	</thead>
 	        	<tbody>
 
@@ -36,36 +36,16 @@
 
                     <volist name="coinList" id="vo">
 	        		<tr>
-	        			<td colspan="2">
+	        			<td>
 	        				<img src="__UPLOAD__/coin/{$vo['img']}" class="img" style="float:left;" />
-	        				<span style="float:left;font-weight:600;color:black;" >({$vo['title']})</span>
+	        				<span style="float:left;" >({$vo['title']})</span>
 	        			</td>
-	        	    </tr>
-	        	    <tr>
-	        	        <td class="left">可用余额:</td>
 	        			<td class="num">{$vo['xnb']|NumToStr}</td>
-	        	    </tr>
-	        	    <tr>
-	        	        <td class="left">冻结委托:</td>
 	        			<td class="num">{$vo['xnbd']|NumToStr}</td>
-	        		</tr>
-	        		<tr>
-	        	        <td class="left">总     计:</td>
-	        			<td class="num">{$vo['xnbz']|NumToStr}</td>
-	        		</tr>
-	        		<tr>
-	        	        <td class="left">折     合(￥):</td>
-	        			<td class="num">{$vo['zhehe']|NumToStr}</td>
-	        		</tr>
-                    <tr style="margin-bottom:10px;">
-	        			<td colspan="2" class="operate">
-	        				<a href="/Home/Trade/index/market/{$vo.name}_cny" class="functionBtn"  style="width:30%;background-color:#C50000;" >去交易</a>
+	        			<td class="operate">
+	        				<a href="/Home/Trade/index/market/{$vo.name}_cny" class="functionBtn"  style="width:25px;background-color:#C50000;" ></a>
 	        			</td>
 	        		</tr>
-                    <tr style="width:100%;height:5px;">
-                    	<td colspan="2" style="border-left:none;border-right:none;"></td>
-                    </tr>
-                   
 					</volist>
 
 	        	</tbody>
@@ -90,15 +70,11 @@
     }
 
     td{
-    	border:1px solid orange;
+    	border:1px solid red;
     }
 
     .icon,.coin,.num,.operate{
 		vertical-align:middle;
-    }
-
-    .left{
-    	width:40%;
     }
 
     .img{
