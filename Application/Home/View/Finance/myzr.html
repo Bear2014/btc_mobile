@@ -5,9 +5,9 @@
 			<h3>转出虚拟币</h3>
 
             <div class="sub-box1" style="border:1px solid #e2e0e0;height:35px;width:96%;margin:1em auto;">
-                <img src="__UPLOAD__/coin/{$coin_list[$xnb]['img']}"  style="width:33px;"/>
+                <img src="__UPLOAD__/coin/{$coin_list[$xnb]['img']}"  style="width:33px;" />
 
-                <select  name="type" id="qianbao_type" style="border:none;border-radius:4px;outline:none;-webkit-appearance: none;box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.41);">
+                <select class="coinSelect"  name="type" id="qianbao_type" style="border:none;border-radius:4px;outline:none;-webkit-appearance: none;box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.41);">
                     <volist name="coin_list" id="vo">
                     <eq name="xnb" value="$key">
                         <option value="{$vo['name']}" selected="selected">{$vo.title} ({$vo['name']|strtoupper})</option>
@@ -73,7 +73,7 @@
             border-radius:4px;
     } 
 
-    select{
+    .coinSelect{
             margin-top:5px;
             margin-left:3%;
             height:25px;

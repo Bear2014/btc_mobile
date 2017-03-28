@@ -5,8 +5,8 @@
 			<h3>转出虚拟币</h3>
              
             <div class="sub-box1" style="border:1px solid #e2e0e0;height:35px;width:96%;margin:1em auto;">
-                <img src="__UPLOAD__/coin/{$coin_list[$xnb]['img']}" style="width:33px;" />
-                <select name="type" id="myzc_type" style="border:none;border-radius:4px;outline:none;-webkit-appearance: none;box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.41);">
+                <img src="__UPLOAD__/coin/{$coin_list[$xnb]['img']}"  style="width:33px;" />
+                <select class="coinSelect" name="type" id="myzc_type" style="border:none;border-radius:4px;outline:none;-webkit-appearance: none;box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.41);">
                     <volist name="coin_list" id="vo">
                     <eq name="xnb" value="$key">
                     <option value="{$vo['name']}" selected="selected">{$vo.title} ({$vo['name']|strtoupper})</option>
@@ -25,7 +25,20 @@
 			<div class="news">
 			  	<form>
 
-                    <select  name="type" id="myzc_type" class="inputstyle">
+                    <select class="inputStyle" name="type" id="myzc_type" style="
+            font-size: 0.7em;
+            font-weight: 600;
+            color: #878787;
+            padding: 0.9em;
+            width: 42.7%;
+            margin: 0em 0.5em 1.8em 0em;
+            border: none;
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+            box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.41);
+            width:97%;
+            height:38px;">
                     	<option value="">-----------请选择转出地址-----------</option>
                         <volist name="userQianbaoList" id="vo">
                     	   <option value="{$vo.addr}">{$vo.name}</option>
@@ -180,6 +193,57 @@
 
     }
 </script>
+
+
+<style type="text/css">
+    img{
+            margin-left:2%;
+            width:35px;
+            float:left;
+            border:none;
+            border-radius:4px;
+    }
+
+    .coinSelect{
+            margin-top:5px;
+            margin-left:3%;
+            height:25px;
+            float:left;
+            color:#878787;
+    }
+
+    .num{
+            margin-top:6px;
+            margin-left:5px;
+            float:left;
+            color:#878787;
+    }
+
+    .numTxt{
+           float:left;
+    }
+
+    .numNum{
+            margin-top:2px;
+            margin-left:5px;
+            float:left;
+            color:#C50000;
+    }
+
+    .fontstyle,option{
+            font-size: 0.7em;
+            font-weight: 600;
+            color: #878787;
+    }
+
+    .beizhu{
+           float:left;
+           padding-top:10px;
+           margin-left:17px;
+    }
+
+</style>
+
 
 </body>
 </html>

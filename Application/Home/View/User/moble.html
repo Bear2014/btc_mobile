@@ -5,62 +5,187 @@
 		<div class="sub-box1 send">
 			<h3>手机绑定</h3>
 
-
+            <empty name="user.moble">
+          
             <!--显示绑定绑定界面开始-->
-				    <input type="text" class="email" id="username" name="username" placeholder="用户名" onfocus="this.value = '';" >
+            <div class="news">
+                   <form>
+
+                    <input type="hidden" id="areaCode" name="areaCode" value="86" />
+				    <input type="text" class="email" id="moble" name="moble" placeholder="手机号码" onfocus="this.value = '';" >
 
                     <div>
                     	<input type="text" class="username" id="verify" name="verify"  placeholder="验证码" onfocus="this.value = '';" style="float:left;">
                        
-                        <img class="codeImg" src="{:U('Verify/code')}" title="换一张" onclick="this.src=this.src+'?t='+Math.random()" />
+                        <img class="codeImg reloadverify" src="{:U('Verify/code')}" title="换一张" onclick="this.src=this.src+'?t='+Math.random()" />
                     </div>
 
-                    <input type="password"  class="email inputPassword" id="password" name="password" placeholder="登录密码" onfocus="this.value = '';">
-                    
-                    <input type="password" class="email inputPassword" id="repassword" name="repassword" placeholder="重复登录密码" onfocus="this.value = '';">
-                    
-			  		<input type="text" class="email" id="invite" name="invite" placeholder="邀请码(非必填)"  onfocus="this.value = '';">
+                    <div>
+				  		<input type="text" class="username" id="invite" name="invite" placeholder="免费短信验证码"  onfocus="this.value = '';" />
+				  	
+				  		<input type="button" class="btn"  style="
+				  		background: #C50000;
+				  		font-size: 1em;
+				  		font-weight: 400;
+				  		font-family: 'Signika', sans-serif;
+				  		color: #fff;
+				  		padding: 0.4em 0.5em 0.5em 0.5em;
+				  		width: 38%;
+				  		border-radius: 4px 4px 4px 4px;
+				  		margin: 0em 0em 2em 1em;
+				  		cursor: pointer;
+				  		border: none;
+				  		outline: none;
+				  		margin-right:7%;
+				  		-webkit-appearance: none;" 
+				  		value="获取免费验证码" onclick="SendCode();" />
 
-                    <span style="font-size:12px;color:#878787;">注册即视为同意协议</span>
+			  		</div>
 
-            <!--显示绑定界面结束--->
+                    <input type="submit" value="绑定手机" onclick="update();" />
+                 </form>
+            </div>
 
-          
+
+           <else/>
 
 
-			<!--显示绑定信息开始-->
 					<div class="news">
 					  	<form>
-		 
+
 		                    <div>
-		                    	<span>用户名: </span>
-		                    	<span>{$user.username}</span>
+		                    	<span>手机号码: </span>
+		                    	<span>{$user.moble}</span>
 		                    </div>
 
 		                    <div>
-		                    	<span>认证名: </span>
-		                    	<span>{$user.truename}</span>
-		                    </div>
-
-		                    <div>
-		                    	<span>证件号: </span>
-		                    	<span>{$user.idcard}</span>
+		                    	<span>绑定时间: </span>
+		                    	<span>{$user.mobletime|date="Y-m-d H:i:s",###}</span>
 		                    </div>
 
 					  	</form>
 				    </div>
+				    
             <!--显示绑定信息结束-->
 
+            </empty>
 
-	       	<input type="submit" value="登录" onclick="upLogin();" />
 		</div>
     </div>
 
 
 <include file="Public:footer" />
 
-<script type="text/javascript">
+<style type="text/css">
+	.codeImg{
+		float:left;
+		margin-left:5%;
+		height:35px;
+	}
 
+	.btn{
+		float:right;
+		margin-right:20%;
+		width:30%;
+		margin-top:-10px;
+	}
+</style>
+
+<script type="text/javascript">
+ 
+   function SendCode() {
+        var areaCode = $("#areaCode").val();
+        var moble = $("#moble").val();
+        var verify = $("#verify").val();
+        
+        if (areaCode == null || areaCode == "") {
+            layer.tips('请输入区号', '#areaCode', {tips: 3});
+            return false;
+        }
+        if (moble == null || moble == "") {
+            layer.tips('请输入手机号码', '#moble', {tips: 3});
+            return false;
+        }
+        if (verify == null || verify == "") {
+            layer.tips('请填写验证码', '#verify', {tips: 3});
+            return false;
+        }
+        $.post("{:U('Verify/real')}", {
+            moble: areaCode + moble,
+            verify: verify
+        }, function (data) {
+            if (data.status == 1) {
+                //刷新验证码
+                $(".reloadverify").click();
+                $("#verify").val('');
+                $('#regBtn').attr("disabled", "disabled");
+                layer.msg(data.info, {icon: 1});
+                var obj = $('#regBtn');
+                var wait = 60;
+                var interval = setInterval(function () {
+                    obj.css('backgroundColor', '#999B9C');
+                    //obj.val(wait + '{:L('user.zaicifasong')}');
+                    obj.val(wait + '正在发送...');
+                    wait--;
+                    if (wait < 0) {
+                        clearInterval(interval);
+                        //obj.val('{:L('user.huoquyanzhengma')}');
+                        obj.val('获取验证码');
+                        obj.css('backgroundColor', '#e55600');
+                    }
+                    ;
+                }, 1000);
+            } else {
+                //刷新验证码
+                $(".reloadverify").click();
+                $("#verify").val('');
+                layer.msg(data.info, {icon: 2});
+                if (data.url) {
+                    window.location = data.url;
+                }
+            }
+        }, "json");
+    }
+
+    function Update() {
+        var areaCode = $("#areaCode").val();
+        var moble = $("#moble").val();
+        var moble_verify = $("#moble_verify").val();
+        var verify = $("#verify").val();
+        
+        if (areaCode == null || areaCode == "") {
+            layer.tips('请输入区号', '#areaCode', {tips: 3});
+            return false;
+        }
+        if (moble == null || moble == "") {
+            //layer.tips('{:L('user.shoujihaoma')}', '#moble', {tips: 3});
+            layer.tips('请输入手机号码', '#moble', {tips: 3});
+            return false;
+        }
+        if (moble_verify == null || moble_verify == "") {
+            //layer.tips('{:L('user.shuduanxinyanzhengma')}', '#moble_verify', {tips: 3});
+            layer.tips('请输入手机验证码', '#moble_verify', {tips: 3});
+            return false;
+        }
+        
+        $.post("{:U('User/upmoble')}", {
+            moble: areaCode + moble,
+            moble_verify: moble_verify
+        }, function (data) {
+            if (data.status == 1) {
+                layer.msg(data.info, {icon: 1});
+                window.location = "{:U('User/moble')}";
+            } else {
+                //刷新验证码
+                $(".reloadverify").click();
+                $("#verify").val('');
+                layer.msg(data.info, {icon: 2});
+                if (data.url) {
+                    window.location = data.url;
+                }
+            }
+        }, "json");
+    }
 </script>
 
 
